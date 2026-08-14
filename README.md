@@ -1,23 +1,23 @@
-# Portafolio Web Personal
+# Portafolio Web Personal — Aurora
 
 ## Descripción
-Mi portafolio profesional interactivo, diseñado y desarrollado desde cero para presentar mi perfil, habilidades técnicas y proyectos destacados como Desarrollador Full-Stack y Analista de Datos. 
-El sitio está construido como una Single Page Application (SPA), optimizado para ofrecer una experiencia de usuario fluida, rápida y visualmente atractiva en cualquier dispositivo.
+Portafolio profesional de **Juan Anthony Calle Rosales**, Desarrollador de Software (web y móvil). Rediseño visual **Aurora**: dark-tech premium con glassmorphism, orbes de luz violeta→cian, tarjetas de cristal con blur y títulos con gradiente. Una sensación de producto SaaS pulido que muestra el trabajo como software real en tiempo real.
 
-## ✨ Características Principales
-* **Diseño UI/UX Personalizado:** Interfaz moderna en modo oscuro (Dark Theme) con una paleta de verdes profundos y animaciones sutiles que mejoran la retención del usuario.
-* **Totalmente Responsivo:** Arquitectura Mobile-First empleando CSS Grid y Flexbox para garantizar una visualización perfecta en smartphones, tablets y monitores de escritorio.
-* **Animaciones al Scroll (Reveal):** Implementación de la API `IntersectionObserver` en JavaScript puro para animar la entrada de elementos a medida que el usuario se desplaza por la página.
-* **Navegación Fluida:** Menú interactivo (Hamburguesa en móviles) con desplazamiento suave (Smooth Scroll) hacia las diferentes secciones del perfil.
-* **Sin Frameworks:** Construido enteramente con tecnologías base (Vanilla) para demostrar un dominio sólido de los fundamentos del desarrollo web.
+Contenido alineado con el CV actual: **React · Node.js · React Native · Firebase**, con Calletano POS (Electron + Socket.IO + SQLite) como proyecto insignia.
 
-## 🛠️ Tecnologías Utilizadas
-* **Estructura:** HTML5 Semántico
-* **Estilos:** CSS3 (Variables nativas, animaciones, Flexbox, Grid)
-* **Interactividad:** JavaScript (Vanilla JS, DOM Manipulation, Observers)
-* **Recursos visuales:** [Devicon](https://devicon.dev/) para la iconografía tecnológica.
-* **Control de Versiones y Despliegue:** Git, GitHub & GitHub Pages
+## ✨ Características
+- **Mundo Aurora:** fondo medianoche `#070B16`, orbes violeta/cian desenfocados, tarjetas `glass` con `backdrop-filter`, acento gradiente (violet→cian), esquinas redondeadas y elevación sutil.
+- **Tema claro/oscuro:** toggle con persistencia en localStorage y respeto a `prefers-color-scheme` en la primera visita.
+- **Hero de producto:** avatar con anillo de gradiente, estado "Disponible para proyectos" con pulso, nombre, rol, stack y dos acciones claras.
+- **Totalmente Responsivo:** mobile-first; grids de 3→2→1 columnas, hamburguesa en móvil.
+- **Sin Frameworks:** HTML5 semántico, CSS3 (variables nativas, Grid, Flexbox) y JavaScript vanilla (IntersectionObserver, scroll suave, scrollspy).
+- **Accesible:** skip-link, focus visible, aria-labels, `prefers-reduced-motion` respetado.
+- **SEO completo:** Google Analytics (G-QMWF35M72H), JSON-LD (Person + ItemList), Open Graph/Twitter, canonical, sitemap.xml y robots.txt.
+
+## 🛠️ Tecnologías
+- **Fuentes:** Sora (títulos), Inter (texto), JetBrains Mono (labels y datos).
+- **Iconos de tecnologías:** [Devicon](https://devicon.dev/).
+- **Despliegue:** GitHub Pages en *https://juancall.github.io/Portafolio-Web/*
 
 ## 🌍 Enlace en Vivo
-Puedes visitar mi portafolio funcional aquí:
 *https://juancall.github.io/Portafolio-Web/*

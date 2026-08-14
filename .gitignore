@@ -1,0 +1,25 @@
+# Dependencias
+node_modules/
+
+# Skills / tooling local (no son parte del sitio)
+.agents/
+.claude/
+.impeccable/
+skills-lock.json
+
+# Carpetas temporales de verificación (capturas headless)
+.capturetest/
+.geom/
+.progtest/
+.lighttest/
+
+# Logs
+*.log
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Editores / IDE
+.idea/
+.vscode/

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://juancall.github.io/Portafolio-Web/sitemap.xml

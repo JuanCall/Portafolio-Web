@@ -7,45 +7,122 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-
         gtag('config', 'G-QMWF35M72H');
     </script>
 
     <meta charset="UTF-8">
+    <meta name="theme-color" id="theme-color-meta" content="#070B16">
+    <script>
+        document.documentElement.classList.add('js');
+        (function () {
+            var light = false;
+            try {
+                var t = localStorage.getItem('theme');
+                light = t === 'light' || (!t && window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches);
+            } catch (e) {}
+            if (light) {
+                document.documentElement.setAttribute('data-theme', 'light');
+                var m = document.getElementById('theme-color-meta');
+                if (m) m.setAttribute('content', '#F3F6FC');
+            }
+        })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juan Calle Rosales | Portafolio</title>
-    <meta name="description" content="Descubre mis proyectos y habilidades.">
+    <title>Juan Calle Rosales | Desarrollador de Software — Web & Móvil</title>
+    <meta name="description" content="Portafolio de Juan Anthony Calle Rosales — Desarrollador de Software (web y móvil). React, Node.js, React Native, Firebase. Conoce Calletano POS, mis proyectos y trayectoria.">
 
-    <link rel="icon" href="img/perfil.jpg" type="image/jpg">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" href="img/perfil.jpg">
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
-    <meta property="og:title" content="Juan Calle Rosales | Portafolio">
-    <meta property="og:description" content="Learn about my projects and skills">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Juan Calle Rosales | Desarrollador de Software — Web & Móvil">
+    <meta property="og:description" content="Portafolio de Juan Anthony Calle Rosales — Desarrollador de Software. React · Node.js · React Native · Firebase. Sistemas en tiempo real.">
+    <meta property="og:locale" content="es_PE">
+    <meta name="twitter:card" content="summary">
     <meta property="og:site_name" content="Juan Calle Rosales | Portafolio">
     <meta property="og:image" content="https://juancall.github.io/Portafolio-Web/img/perfil.jpg">
     <meta property="og:url" content="https://juancall.github.io/Portafolio-Web/">
+    <link rel="canonical" href="https://juancall.github.io/Portafolio-Web/">
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Juan Anthony Calle Rosales",
+        "jobTitle": "Desarrollador de Software (Web y Móvil)",
+        "url": "https://juancall.github.io/Portafolio-Web/",
+        "image": "https://juancall.github.io/Portafolio-Web/img/perfil.jpg",
+        "email": "mailto:juancallerosales19@gmail.com",
+        "telephone": "+51979363149",
+        "address": { "@type": "PostalAddress", "addressLocality": "Piura", "addressCountry": "PE" },
+        "alumniOf": { "@type": "CollegeOrUniversity", "name": "Universidad Privada del Norte" },
+        "knowsAbout": ["React", "Node.js", "React Native", "Firebase", "Electron", "Socket.IO", "Sistemas POS", "Desarrollo Web", "Desarrollo Móvil"],
+        "sameAs": [
+            "https://www.linkedin.com/in/juan-anthony-calle-rosales-a828a8210/",
+            "https://github.com/JuanCall",
+            "https://www.instagram.com/juanoff19/"
+        ]
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Proyectos de Juan Calle Rosales",
+        "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Calletano POS — Sistema de Punto de Venta para Restaurantes", "url": "https://github.com/JuanCall/Web-Calletano-Restaurant" },
+            { "@type": "ListItem", "position": 2, "name": "Calletano Web — Sitio oficial y menú digital", "url": "https://calletano-restaurant.web.app/" },
+            { "@type": "ListItem", "position": 3, "name": "Portafolio-Web", "url": "https://juancall.github.io/Portafolio-Web/" }
+        ]
+    }
+    </script>
+
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <a href="#" class="nav-logo">JCR</a>
-            <ul class="nav-links">
+<!--
+  AURORA — JUAN ANTHONY CALLE ROSALES
+  THESIS: Dark-tech premium que muestra el trabajo como producto: glassmorphism, orbes de
+  luz violeta→cian, títulos con gradiente y tarjetas de cristal. Refuerza la identidad de
+  "desarrollador que construye sistemas en tiempo real".
+  OWN-WORLD: fondo medianoche #070B16, orbes violeta/cian desenfocados, tarjetas glass con
+  blur, acento gradiente (violet→cian), Sora para títulos, Inter para texto, JetBrains Mono para datos.
+  STORY: el visitante ve un producto pulido, entiende que el trabajo es software real
+  (Calletano POS en tiempo real) y tiene un camino claro a proyectos y CV.
+  FIRST VIEWPORT: avatar con anillo de gradiente, estado "Disponible para proyectos", nombre,
+  rol, stack y dos acciones.
+  FORM: variante aurora (glassmorphism), elegida por el usuario el 2026-08-13.
+  FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+
+    <!-- Skip link -->
+    <a class="skip-link" href="#main">Saltar al contenido</a>
+
+    <!-- Scroll progress: indicador de estado, sigue el scroll 1:1 (transform scaleX, GPU) -->
+    <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+
+    <nav class="navbar" id="navbar" aria-label="Navegación principal">
+        <div class="nav-inner">
+            <a href="#inicio" class="logo">JCR<span class="dot">.</span></a>
+            <ul class="links">
                 <li><a href="#sobre-mi">Sobre Mí</a></li>
                 <li><a href="#habilidades">Habilidades</a></li>
                 <li><a href="#proyectos">Proyectos</a></li>
                 <li><a href="#trayectoria">Trayectoria</a></li>
-                <li><a href="#contacto" class="nav-cta">Contacto</a></li>
+                <li><a href="#contacto" class="cta">Contacto</a></li>
             </ul>
-            <button class="hamburger" id="hamburger" aria-label="Menú">
-                <span></span><span></span><span></span>
-            </button>
+            <div class="right">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar a modo claro" aria-pressed="false">
+                    <svg class="icon-sun" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="8" cy="8" r="3"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.4 1.4M11.6 11.6L13 13M3 13l1.4-1.4M11.6 4.4L13 3"/></svg>
+                    <svg class="icon-moon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M13 9.5A6 6 0 0 1 6.5 3a6 6 0 1 0 6.5 6.5z"/></svg>
+                </button>
+                <button class="hamburger" id="hamburger" aria-label="Abrir menú" aria-controls="nav-mobile" aria-expanded="false"><span></span><span></span><span></span></button>
+            </div>
         </div>
         <div class="nav-mobile" id="nav-mobile">
             <a href="#sobre-mi">Sobre Mí</a>
@@ -56,464 +133,249 @@
         </div>
     </nav>
 
-    <!-- Hero -->
-    <header class="hero">
-        <div class="hero-bg-grid"></div>
-        <div class="hero-orb hero-orb-1"></div>
-        <div class="hero-orb hero-orb-2"></div>
+    <header class="hero" id="inicio">
+        <div class="hero-bg">
+            <div class="orb orb-1" aria-hidden="true"></div>
+            <div class="orb orb-2" aria-hidden="true"></div>
+            <div class="orb orb-3" aria-hidden="true"></div>
+            <div class="grain" aria-hidden="true"></div>
+        </div>
         <div class="hero-content">
-            <div class="profile-img-container hero-animate" style="--delay:0.1s">
-                <img src="img/perfil.jpg" alt="Foto de perfil" class="profile-img">
-                <div class="profile-ring"></div>
+            <div class="avatar-wrap">
+                <div class="avatar-ring">
+                    <img src="img/perfil.jpg" alt="Foto de perfil de Juan Calle Rosales" width="132" height="132" fetchpriority="high" class="avatar">
+                </div>
             </div>
-            <p class="hero-eyebrow hero-animate" style="--delay:0.25s">Ingeniería de Sistemas · Piura, Perú</p>
-            <h1 class="hero-animate" style="--delay:0.4s">Juan Anthony<br><span>Calle Rosales</span></h1>
-            <h2 class="hero-animate" style="--delay:0.55s">Desarrollador Full-Stack & Analista de Datos</h2>
-            <p class="hero-desc hero-animate" style="--delay:0.7s">Transformo problemas complejos en soluciones tecnológicas escalables. Especializado en el desarrollo de aplicaciones web de extremo a extremo, diseño de bases de datos y optimización de procesos mediante análisis estratégico.</p>
-            <div class="hero-buttons hero-animate" style="--delay:0.85s">
-                <a href="#proyectos" class="btn btn-primary">Ver Proyectos</a>
-                <a href="docs/CV_Juan_Calle.pdf" target="_blank" class="btn btn-secondary">Descargar CV</a>
+            <p class="status"><span class="pulse-dot" aria-hidden="true"></span>Disponible para proyectos</p>
+            <h1 class="display">Juan Anthony<br><span>Calle Rosales</span></h1>
+            <p class="role">Desarrollador de Software · Web &amp; Móvil</p>
+            <p class="desc">Estudiante de Ingeniería de Sistemas (último ciclo, egreso 2026). Construyo sistemas completos y en tiempo real: escritorio con Electron, apps móviles con React Native, APIs REST con Node.js y sitios en Firebase. Transformo procesos manuales en software que funciona.</p>
+            <div class="stack mono">React · Node.js · React Native · Firebase</div>
+            <div class="btns">
+                <a href="#proyectos" class="btn btn-primary">Ver proyectos</a>
+                <a href="docs/CV - Calle Rosales.docx" download class="btn btn-ghost">Descargar CV</a>
             </div>
         </div>
-        <div class="hero-scroll-hint">
-            <span>Desplázate</span>
-            <div class="scroll-line"></div>
-        </div>
+        <div class="scroll-hint" aria-hidden="true"><span class="mono">scroll</span><i></i></div>
     </header>
 
-    <!-- Sobre Mí -->
-    <section id="sobre-mi" class="about">
-        <div class="about-container">
-            <div class="section-label reveal">Conóceme</div>
-            <h2 class="section-title reveal">Sobre Mí</h2>
-            <div class="about-grid">
-                <div class="about-text reveal">
-                    <p>Soy estudiante de Ingeniería de Sistemas enfocado en el desarrollo Full-Stack (Python, PostgreSQL, JavaScript) y el análisis estratégico de datos. Me apasiona construir soluciones eficientes para problemas reales, abarcando desde la optimización de procesos comerciales hasta la creación de plataformas como JuntaSmart. Además, mi experiencia en docencia ha fortalecido mi liderazgo y comunicación, permitiéndome traducir lógica técnica compleja en productos accesibles y orientados al usuario final.</p>
-                </div>
-                
-                <div class="about-stats reveal">
-                    <div class="stat-card">
-                        <span class="stat-number">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
-                            </svg>
-                        </span>
-                        <span class="stat-label">Desarrollo Full-Stack</span>
+    <main id="main">
+
+        <section id="sobre-mi" class="section">
+            <div class="container">
+                <p class="sec-label mono">01 · Conóceme</p>
+                <h2 class="sec-title">Sobre Mí</h2>
+                <div class="about-grid reveal">
+                    <div class="about-text">
+                        <p>Soy estudiante de Ingeniería de Sistemas (último ciclo, egreso 2026) y desarrollador de software enfocado en desarrollo <strong>web y móvil</strong>. Construyo soluciones completas: aplicaciones de escritorio con Electron, APIs REST con Node.js, aplicaciones móviles con React Native y sitios web desplegados en la nube con Firebase.</p>
+                        <p>Desarrollé de forma integral un sistema de <strong>Punto de Venta (POS) para restaurantes</strong> con sincronización en tiempo real entre caja, meseros y web. Me destaco por transformar procesos manuales en sistemas eficientes: gestión de salón, cobros, inventario y reportes, combinando sólidas habilidades técnicas con liderazgo y comunicación efectiva con usuarios no técnicos.</p>
                     </div>
-                    <div class="stat-card">
-                        <span class="stat-number">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
-                            </svg>
-                        </span>
-                        <span class="stat-label">Análisis de Datos</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
-                                <path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/>
-                            </svg>
-                        </span>
-                        <span class="stat-label">Optimización de Procesos</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                                <circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                            </svg>
-                        </span>
-                        <span class="stat-label">Comunicación y Liderazgo</span>
+                    <div class="stat-strip reveal" style="--delay:.1s">
+                        <div class="stat glass"><b>3</b><span>Certificaciones</span></div>
+                        <div class="stat glass"><b>2</b><span>Proyectos flagship</span></div>
+                        <div class="stat glass"><b>2</b><span>Idiomas</span></div>
+                        <div class="stat glass"><b>5</b><span>Años de formación</span></div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Habilidades -->
-    <section id="habilidades" class="skills">
-        <div class="skills-container">
-            <div class="section-label reveal">Tecnologías</div>
-            <h2 class="section-title reveal">Mis Habilidades</h2>
-            <div class="skills-grid">
-                
-                <div class="skill-category reveal" style="--delay:0s">
-                    <div class="skill-category-header">
-                        <span class="skill-icon-bg">◈</span>
+        <section id="habilidades" class="section alt">
+            <div class="container">
+                <p class="sec-label mono">02 · Stack</p>
+                <h2 class="sec-title">Habilidades</h2>
+                <div class="skills-grid reveal">
+                    <div class="skill-card glass">
+                        <h3>Backend</h3>
+                        <ul class="chips">
+                            <li class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span>Node.js</span></li>
+                            <li class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/express/express-original.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span>Express</span></li>
+                            <li class="chip"><span>APIs REST</span></li>
+                            <li class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/socketio/socketio-original.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span>Socket.IO</span></li>
+                        </ul>
+                    </div>
+                    <div class="skill-card glass">
                         <h3>Frontend</h3>
+                        <ul class="chips">
+                            <li class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span>React</span></li>
+                            <li class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span>JavaScript</span></li>
+                            <li class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span>HTML5</span></li>
+                            <li class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span>CSS3</span></li>
+                            <li class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/bootstrap/bootstrap-original.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span>Bootstrap 5</span></li>
+                            <li class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/chartjs/chartjs-original.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span>Chart.js</span></li>
+                            <li class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vitejs/vitejs-original.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span>Vite</span></li>
+                        </ul>
                     </div>
-                    <div class="skill-icons">
-                        <div class="skill-item">
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" style="width: 56px; height: 56px;" alt="HTML5" />
-                            <span>HTML5</span>
-                        </div>
-                        <div class="skill-item">
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg" style="width: 56px; height: 56px;" alt="CSS3" />
-                            <span>CSS3</span>
-                        </div>
-                        <div class="skill-item">
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" style="width: 56px; height: 56px;" alt="JavaScript" />
-                            <span>JavaScript</span>
-                        </div>
+                    <div class="skill-card glass">
+                        <h3>Bases de Datos</h3>
+                        <ul class="chips">
+                            <li class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/sqlite/sqlite-original.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span>SQLite</span></li>
+                            <li class="chip"><span>SQL</span></li>
+                            <li class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span>Firestore</span></li>
+                            <li class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span>Firebase Auth</span></li>
+                        </ul>
                     </div>
-                </div>
-
-                <div class="skill-category reveal" style="--delay:0.15s">
-                    <div class="skill-category-header">
-                        <span class="skill-icon-bg">◈</span>
-                        <h3>Backend & Base de Datos</h3>
+                    <div class="skill-card glass">
+                        <h3>Desktop &amp; Móvil</h3>
+                        <ul class="chips">
+                            <li class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/electron/electron-original.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span>Electron</span></li>
+                            <li class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span>React Native</span></li>
+                            <li class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/expo/expo-original.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span>Expo</span></li>
+                            <li class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span>TypeScript</span></li>
+                        </ul>
                     </div>
-                    <div class="skill-icons">
-                        <div class="skill-item">
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" style="width: 56px; height: 56px;" alt="Python" />
-                            <span>Python</span>
-                        </div>
-                        <div class="skill-item">
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg" style="width: 56px; height: 56px;" alt="PostgreSQL" />
-                            <span>PostgreSQL</span>
-                        </div>
+                    <div class="skill-card glass">
+                        <h3>Cloud &amp; Despliegue</h3>
+                        <ul class="chips">
+                            <li class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span>Firebase Hosting</span></li>
+                            <li class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span>Firebase Admin</span></li>
+                        </ul>
                     </div>
-                </div>
-
-                <div class="skill-category reveal" style="--delay:0.3s">
-                    <div class="skill-category-header">
-                        <span class="skill-icon-bg">◈</span>
-                        <h3>Control de Versiones</h3>
-                    </div>
-                    <div class="skill-icons">
-                        <div class="skill-item">
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" style="width: 56px; height: 56px;" alt="Git" />
-                            <span>Git</span>
-                        </div>
-                        <div class="skill-item">
-                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg" style="width: 56px; height: 56px;" alt="GitHub" />
-                            <span>GitHub</span>
-                        </div>
+                    <div class="skill-card glass">
+                        <h3>Herramientas</h3>
+                        <ul class="chips">
+                            <li class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span>Git</span></li>
+                            <li class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span>GitHub</span></li>
+                            <li class="chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/npm/npm-original-wordmark.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span>npm workspaces</span></li>
+                            <li class="chip"><span>Excel avanzado</span></li>
+                        </ul>
                     </div>
                 </div>
-
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Proyectos -->
-    <section id="proyectos" class="projects">
-        <div class="projects-container">
-            <div class="section-label reveal">Trabajos</div>
-            <h2 class="section-title reveal">Proyectos Destacados</h2>
-            <div class="projects-grid">
-
-                <!--<div class="project-card reveal" style="--delay:0.1s">
-                    <div class="project-image">
-                        <img src="img/Mediflow.jpg" alt="Mediflow">
-                        <span class="project-number">01</span>
-                    </div>
-                    <div class="project-info">
-                        <h3>Mediflow-Sistema-Citas</h3>
-                        <p>Sistema integral para la automatización de agendas clínicas. Optimiza la asignación de turnos mediante reglas dinámicas, reduciendo el solapamiento de horarios en un 30%.</p>
-                        <div class="project-tags">
-                            <span>Python</span><span>PostgreSQL</span><span>JavaScript</span>
+        <section id="proyectos" class="section">
+            <div class="container">
+                <p class="sec-label mono">03 · Trabajos</p>
+                <h2 class="sec-title">Proyectos</h2>
+                <div class="projects-grid reveal">
+                    <article class="project-card glass">
+                        <div class="shot"><img src="img/SistemaPOS_Calletano.jpg" alt="Captura del sistema Calletano POS" loading="lazy" decoding="async" width="640" height="360"></div>
+                        <div class="p-body">
+                            <div class="p-top"><span class="badge mono">FLAGSHIP</span><span class="p-year mono">2026</span></div>
+                            <h3>Calletano POS</h3>
+                            <p>Sistema de Punto de Venta para Restaurantes con tres componentes sincronizados en tiempo real: caja de escritorio (Electron + React), app móvil POS-Mozo (React Native/Expo/TypeScript) y web. API REST y tiempo real con Socket.IO sobre SQLite, autenticación segura (bcrypt), validación (Zod) y logging (Winston). Gestión de salón, cobros mixtos, boletas con QR SUNAT, arqueo de caja, dashboard gerencial (Chart.js), inventario, delivery, club de clientes e instalador de Windows (NSIS).</p>
+                            <ul class="tags mono"><li>React</li><li>Node.js</li><li>Electron</li><li>Socket.IO</li><li>SQLite</li><li>Chart.js</li></ul>
+                            <div class="p-links">
+                                <a href="https://github.com/JuanCall/Web-Calletano-Restaurant" target="_blank" rel="noopener noreferrer" class="link">Código →</a>
+                            </div>
                         </div>
-                        <div class="project-links">
-                            <a href="https://github.com/JuanCall/Mediflow-Sistema-Citas" class="btn-link btn-link-github">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.929.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.63-5.37-12-12-12z"/>
-                                </svg>
-                                Código
-                            </a>
+                    </article>
+                    <article class="project-card glass">
+                        <div class="shot"><img src="img/Web-CalletanoRestaurant.jpg" alt="Captura del sitio Calletano Web" loading="lazy" decoding="async" width="640" height="360"></div>
+                        <div class="p-body">
+                            <div class="p-top"><span class="badge mono">EN VIVO</span><span class="p-year mono">2026</span></div>
+                            <h3>Calletano Web</h3>
+                            <p>Sitio público del restaurante con menú digital: carta y menú del día en línea, precios y estado abierto/cerrado en tiempo real desde Firestore, y pedidos directos por WhatsApp. SEO técnico (Schema.org, Open Graph, sitemap.xml, robots.txt) y diseño mobile-first, desplegado en Firebase Hosting.</p>
+                            <ul class="tags mono"><li>JavaScript</li><li>Firebase</li><li>Bootstrap 5</li><li>SEO</li></ul>
+                            <div class="p-links">
+                                <a href="https://github.com/JuanCall/Web-Calletano-Restaurant" target="_blank" rel="noopener noreferrer" class="link">Código →</a>
+                                <a href="https://calletano-restaurant.web.app/" target="_blank" rel="noopener noreferrer" class="link link-solid">Ver demo →</a>
+                            </div>
                         </div>
-                    </div>
-                </div> -->
-
-                <div class="project-card reveal" style="--delay:0.2s">
-                    <div class="project-image">
-                        <img src="img/Sistema-Reservas.jpg" alt="reservas">
-                        <span class="project-number">01</span>
-                    </div>
-                    <div class="project-info">
-                        <h3>Sistema-Transaccional-Reservas-Hotel</h3>
-                        <p>Aplicación full-stack para la gestión de reservas de habitaciones, integrando visualización de disponibilidad en tiempo real, validación de conflictos y pasarela de pagos.</p>
-                        <div class="project-tags">
-                            <span>Python</span><span>PostgreSQL</span><span>HTML/CSS</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/JuanCall/Sistema-Transaccional-Reservas-Hotel" class="btn-link btn-link-github">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.929.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.63-5.37-12-12-12z"/>
-                                </svg>
-                                Código
-                            </a>
-                            <a href="https://juancall.github.io/Sistema-Transaccional-Reservas-Hotel/frontend/" class="btn-link btn-link-live">
-                                Ver Demo
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                                    <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
+                    </article>
                 </div>
-
-                <div class="project-card reveal" style="--delay:0.3s">
-                    <div class="project-image">
-                        <img src="img/Web-CalletanoRestaurant.jpg" alt="Web-Calletano-Restaurant">
-                        <span class="project-number">02</span>
-                    </div>
-                    <div class="project-info">
-                        <h3>Web-Calletano-Restaurant</h3>
-                        <p>Plataforma web oficial diseñada para digitalizar la oferta gastronómica. Incluye un sistema de acceso rápido al menú mediante códigos QR dinámicos y estrategias de SEO técnico.</p>
-                        <div class="project-tags">
-                            <span>JavaScript</span><span>HTML5</span><span>CSS3</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/JuanCall/Web-Calletano-Restaurant" class="btn-link btn-link-github">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.929.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.63-5.37-12-12-12z"/>
-                                </svg>
-                                Código
-                            </a>
-                            <a href="https://calletano-restaurant.web.app/" class="btn-link btn-link-live">
-                                Ver Demo
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                                    <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card reveal" style="--delay:0.4s">
-                    <div class="project-image">
-                        <img src="img/Portafolio-Web.jpg" alt="Portafolio">
-                        <span class="project-number">03</span>
-                    </div>
-                    <div class="project-info">
-                        <h3>Portafolio-Web</h3>
-                        <p>Diseño y desarrollo de mi portafolio profesional interactivo (Single Page Application). Optimizado para alto rendimiento, diseño responsivo y animaciones fluidas al hacer scroll.</p>
-                        <div class="project-tags">
-                            <span>HTML5</span><span>CSS3</span><span>JavaScript</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/JuanCall/Portafolio-Web" class="btn-link btn-link-github">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.929.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.63-5.37-12-12-12z"/>
-                                </svg>
-                                Código
-                            </a>
-                            <a href="https://juancall.github.io/Portafolio-Web/" class="btn-link btn-link-live">
-                                Ver Demo
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                                    <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card reveal" style="--delay:0.5s">
-                    <div class="project-image">
-                        <img src="img/SistemaPOS_Calletano.jpg" alt="POS-CalletanoRestaurant">
-                        <span class="project-number">04</span>
-                    </div>
-                    <div class="project-info">
-                        <h3>Sistema POS - Calletano Restaurant</h3>
-                        <p>Sistema de punto de venta integral para la gestión de mesas, toma de pedidos en tiempo real, procesamiento de pagos y generación automática de reportes de ventas detallados.</p>
-                        <div class="project-tags">
-                            <span>JavaScript</span><span>Firebase</span><span>HTML/CSS</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/JuanCall/Web-Calletano-Restaurant" class="btn-link btn-link-github">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.929.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.63-5.37-12-12-12z"/>
-                                </svg>
-                                Código
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card reveal" style="--delay:0.6s">
-                    <div class="project-image">
-                        <img src="img/SistemaSmart-Farmacia.jpg" alt="SistemaSmart Farmacia">
-                        <span class="project-number">05</span>
-                    </div>
-                    <div class="project-info">
-                        <h3>SistemaSmart (Edición Farmacia)</h3>
-                        <p>Solución integral POS e inventario offline. Implementa un motor PEPS (FIFO) automático para el control estricto de lotes y fechas de vencimiento, con integración de hardware nativo.</p>
-                        <div class="project-tags">
-                            <span>Python</span><span>FastAPI</span><span>SQLite</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/JuanCall/SistemaSmart-Farmacia" class="btn-link btn-link-github">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.929.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.63-5.37-12-12-12z"/>
-                                </svg>
-                                Código
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card reveal" style="--delay:0.7s">
-                    <div class="project-image">
-                        <img src="img/FerretSmart.jpg" alt="FerretSmart Ferretería">
-                        <span class="project-number">06</span>
-                    </div>
-                    <div class="project-info">
-                        <h3>FerretSmart (Edición Ferretería)</h3>
-                        <p>Sistema POS adaptado al sector ferretero. Cuenta con soporte nativo para ventas con unidades de medida fraccionadas, módulo de cotizaciones rápidas y cuadre de caja híbrido.</p>
-                        <div class="project-tags">
-                            <span>Python</span><span>FastAPI</span><span>SQLite</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/JuanCall/FerretSmart-Ferreteria" class="btn-link btn-link-github">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.929.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.63-5.37-12-12-12z"/>
-                                </svg>
-                                Código
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
+                <p class="more mono"><span>&gt;</span> También: <a href="https://github.com/JuanCall/Portafolio-Web" target="_blank" rel="noopener noreferrer">Portafolio-Web</a> (este sitio)</p>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Trayectoria -->
-    <section id="trayectoria" class="timeline-section">
-        <div class="timeline-container">
-            <div class="section-label reveal">Historial</div>
-            <h2 class="section-title reveal">Mi Trayectoria</h2>
-            <div class="timeline">
-
-                <div class="timeline-item reveal">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">2021 — 2026 (Actualidad)</span>
-                        <h3>Ingeniería de Sistemas</h3>
-                        <h4>Universidad Privada del Norte</h4>
-                        <p>Estudiante de últimos ciclos con enfoque en desarrollo de software, arquitectura de sistemas y análisis de datos estratégico.</p>
+        <section id="trayectoria" class="section alt">
+            <div class="container">
+                <p class="sec-label mono">04 · Historial</p>
+                <h2 class="sec-title">Trayectoria</h2>
+                <div class="traj-grid reveal">
+                    <div class="timeline">
+                        <div class="tl-item">
+                            <span class="tl-date mono">2021 — 2026</span>
+                            <h3>Ingeniería de Sistemas</h3>
+                            <p class="tl-sub mono">Universidad Privada del Norte (UPN)</p>
+                            <p>Último ciclo, próximo a egresar. Formación en desarrollo de software, bases de datos y análisis de datos.</p>
+                        </div>
+                        <div class="tl-item">
+                            <span class="tl-date mono">3 meses · 320 h</span>
+                            <h3>Practicante Preprofesional de Sistemas</h3>
+                            <p class="tl-sub mono">Droguería SILSAN S.A.C. · Trujillo</p>
+                            <p>Soporte y mantenimiento del sistema de control de asistencia (Google Apps Script), monitoreo de registros, pruebas manuales y apoyo en automatización.</p>
+                        </div>
+                        <div class="tl-item">
+                            <span class="tl-date mono">Ene — Feb 2026</span>
+                            <h3>Docente de Verano</h3>
+                            <p class="tl-sub mono">I.E.P. Divino Jesús · Piura</p>
+                            <p>Diseño y ejecución de planes de estudio. Gestión de los grupos Alpha y Beta, fortaleciendo liderazgo y comunicación.</p>
+                        </div>
                     </div>
+                    <aside class="side reveal" style="--delay:.1s">
+                        <div class="mini-card glass">
+                            <h3>Certificaciones</h3>
+                            <ul class="cert mono">
+                                <li><b>2025</b>CCNA: Conmutación, Enrutamiento y Redes Inalámbricas — Cisco</li>
+                                <li><b>2024</b>Introducción a la Ciencia de Datos — Cisco</li>
+                                <li><b>2022</b>CLA: Programming Essentials in C — Cisco</li>
+                            </ul>
+                        </div>
+                        <div class="mini-card glass">
+                            <h3>Idiomas</h3>
+                            <ul class="lang mono"><li>Español — nativo</li><li>Inglés — A2 · documentación técnica</li></ul>
+                        </div>
+                    </aside>
                 </div>
-
-                <div class="timeline-item reveal">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">Febrero 2026</span>
-                        <h3>Docente de Verano</h3>
-                        <h4>I.E.P. Divino Jesús</h4>
-                        <p>Diseño y ejecución de planes de estudio para estudiantes. Gestión integral de los grupos Alpha y Beta, desarrollando habilidades sólidas de liderazgo, comunicación efectiva y manejo de grupos.</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item reveal">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">Duración: 3 meses</span>
-                        <h3>Practicante Preprofesional de Sistemas</h3>
-                        <h4>Droguería SILSAN S.A.C.</h4>
-                        <p>Soporte técnico en el sistema de control de asistencia desarrollado con Google Apps Script. Pruebas manuales, monitoreo de registros y apoyo en la automatización de procesos internos.</p>
-                    </div>
-                </div>
-
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Footer / Contacto -->
+    </main>
+
     <footer id="contacto" class="footer">
-        <div class="footer-bg"></div>
-        <div class="footer-container">
-            <div class="footer-headline reveal">
-                <div class="section-label">Contacto</div>
-                <h2>¿Trabajamos<br><span>juntos?</span></h2>
-                <p>Estoy disponible para nuevos proyectos y oportunidades profesionales.</p>
-            </div>
-            <div class="contact-grid reveal">
-                <a href="mailto:juancallerosales19@gmail.com" class="contact-card">
-                    <span class="contact-icon">✉</span>
-                    <span>juancallerosales19@gmail.com</span>
+        <div class="container footer-inner reveal">
+            <p class="sec-label mono">05 · Contacto</p>
+            <h2 class="display">¿Trabajamos juntos?</h2>
+            <p class="footer-sub">Disponible para nuevos proyectos y oportunidades profesionales. Escríbeme y respondo a la brevedad.</p>
+            <div class="contact-grid">
+                <a href="mailto:juancallerosales19@gmail.com" class="contact-card glass">
+                    <span class="mono">juancallerosales19@gmail.com</span>
                 </a>
-                <a href="https://wa.me/51979363149" target="_blank" class="contact-card">
-                    <span class="contact-icon">✆</span>
-                    <span>(+51) 979 363 149</span>
+                <a href="https://wa.me/51979363149" target="_blank" rel="noopener noreferrer" class="contact-card glass">
+                    <span class="mono">(+51) 979 363 149</span>
                 </a>
             </div>
-            <div class="social-links reveal">
-                <a href="https://www.linkedin.com/in/juan-anthony-calle-rosales-a828a8210/" target="_blank">LinkedIn</a>
-                <a href="https://github.com/JuanCall" target="_blank">GitHub</a>
-                <a href="https://www.instagram.com/juanoff19/" target="_blank">Instagram</a>
+            <div class="social">
+                <a href="https://www.linkedin.com/in/juan-anthony-calle-rosales-a828a8210/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                <a href="https://github.com/JuanCall" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://www.instagram.com/juanoff19/" target="_blank" rel="noopener noreferrer">Instagram</a>
             </div>
-            <p class="copyright">© 2026 Juan Anthony Calle Rosales. Diseñado y desarrollado desde cero.</p>
+            <p class="copyright mono">© 2026 Juan Anthony Calle Rosales · HTML + CSS + JS</p>
         </div>
     </footer>
 
     <script>
-        // Smooth scroll personalizado con animación
-        function smoothScrollTo(targetY, duration = 800) {
-            const startY = window.scrollY;
-            const distance = targetY - startY;
-            let startTime = null;
-
-            function easeInOutCubic(t) {
-                return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-            }
-
-            function step(currentTime) {
-                if (!startTime) startTime = currentTime;
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                window.scrollTo(0, startY + distance * easeInOutCubic(progress));
-                if (progress < 1) requestAnimationFrame(step);
-            }
-
-            requestAnimationFrame(step);
-        }
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    e.preventDefault();
-                    const navHeight = document.getElementById('navbar').offsetHeight;
-                    const targetPosition = target.getBoundingClientRect().top + window.scrollY - navHeight;
-                    smoothScrollTo(targetPosition, 800);
-                    navMobile.classList.remove('open');
-                    hamburger.classList.remove('active');
-                }
-            });
-        });
-
-        // Navbar scroll effect
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            navbar.classList.toggle('scrolled', window.scrollY > 60);
-        });
-
-        // Hamburger menu
-        const hamburger = document.getElementById('hamburger');
-        const navMobile = document.getElementById('nav-mobile');
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navMobile.classList.toggle('open');
-        });
-
-        // Scroll reveal with IntersectionObserver
-        const reveals = document.querySelectorAll('.reveal');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-
-        reveals.forEach(el => observer.observe(el));
+        function smoothTo(y,d){ d=d||800; var s=window.scrollY, dist=y-s, t=null;
+            function e(i){ return i<0.5?4*i*i*i:1-Math.pow(-2*i+2,3)/2; }
+            function st(now){ if(!t) t=now; var p=Math.min((now-t)/d,1); window.scrollTo(0,s+dist*e(p)); if(p<1) requestAnimationFrame(st); }
+            requestAnimationFrame(st); }
+        var navbar=document.getElementById('navbar');
+        window.addEventListener('scroll',function(){ navbar.classList.toggle('scrolled', window.scrollY>40); },{passive:true});
+        var hamburger=document.getElementById('hamburger'), navMobile=document.getElementById('nav-mobile');
+        document.querySelectorAll('a[href^="#"]').forEach(function(a){ a.addEventListener('click',function(e){
+            var href=this.getAttribute('href'); if(href==='#') return;
+            var target=document.querySelector(href); if(!target) return;
+            e.preventDefault();
+            var y=target.getBoundingClientRect().top+window.scrollY-navbar.offsetHeight;
+            smoothTo(y); navMobile.classList.remove('open'); hamburger.classList.remove('active');
+        }); });
+        hamburger.addEventListener('click',function(){ hamburger.classList.toggle('active'); var o=navMobile.classList.toggle('open'); hamburger.setAttribute('aria-expanded',o); });
+        var obs=new IntersectionObserver(function(en){ en.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } }); },{threshold:0.1});
+        document.querySelectorAll('.reveal').forEach(function(el){ obs.observe(el); });
+        var secs=document.querySelectorAll('section[id], footer[id]'), anchors=document.querySelectorAll('.links a[href^="#"]');
+        var spy=new IntersectionObserver(function(en){ en.forEach(function(e){ if(e.isIntersecting){ anchors.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href')==='#'+e.target.id); }); } }); },{rootMargin:'-30% 0px -55% 0px'});
+        secs.forEach(function(s){ spy.observe(s); });
+        var prog=document.getElementById('scroll-progress'), progTicking=false;
+        function updateProg(){ progTicking=false; var max=document.documentElement.scrollHeight-window.innerHeight; prog.style.transform='scaleX('+(max>0?Math.min(window.scrollY/max,1):0)+')'; }
+        window.addEventListener('scroll',function(){ if(!progTicking){ progTicking=true; requestAnimationFrame(updateProg); } },{passive:true});
+        updateProg();
+        var tt=document.getElementById('theme-toggle'), tcm=document.getElementById('theme-color-meta');
+        function apply(l){ if(l){ document.documentElement.setAttribute('data-theme','light'); tt.setAttribute('aria-pressed','true'); } else { document.documentElement.removeAttribute('data-theme'); tt.setAttribute('aria-pressed','false'); } if(tcm) tcm.setAttribute('content', l?'#F3F6FC':'#070B16'); }
+        apply(document.documentElement.getAttribute('data-theme')==='light');
+        tt.addEventListener('click',function(){ var l=document.documentElement.getAttribute('data-theme')==='light'; apply(!l); try{ localStorage.setItem('theme', l?'dark':'light'); }catch(e){} });
+        document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&navMobile.classList.contains('open')){ navMobile.classList.remove('open'); hamburger.classList.remove('active'); hamburger.focus(); } });
     </script>
 </body>
 </html>
