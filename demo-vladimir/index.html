@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Juguería Vladimir · Demostración de planes</title>
+<meta name="description" content="Demostración interactiva: compara una landing informativa con una app de pedidos por WhatsApp para Juguería Vladimir." />
+
+<!-- Tipografías: Fraunces (display, cálida) + Plus Jakarta Sans (texto) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+<!-- Tailwind CSS vía CDN (agilidad para la demo) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  /* ===== Tokens de marca ===== */
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          /* Naranja cítrico: color principal de la marca */
+          brand: { 50:'#FFF5ED',100:'#FFE8D6',200:'#FFCFAE',300:'#FFAE7A',400:'#FF8A45',500:'#F4701F',600:'#D95A0E',700:'#B2460D' },
+          /* Verde hoja: acentos, confirmaciones y categoría detox */
+          leaf: { 50:'#F2FBF3',100:'#DDF3DF',200:'#B9E5BE',300:'#8BD293',400:'#57BB62',500:'#35A03F',600:'#26802F',700:'#1F6527' },
+          ink: '#241C17',
+          cream: '#FFFAF3'
+        },
+        fontFamily: {
+          display: ['Fraunces', 'Georgia', 'serif'],
+          sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif']
+        },
+        boxShadow: {
+          soft: '0 18px 40px -18px rgba(36,28,23,.28)',
+          card: '0 2px 10px -6px rgba(36,28,23,.14)'
+        }
+      }
+    }
+  };
+</script>
+
+<style>
+  html { -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
+  body { text-wrap: pretty; }
+
+  /* Anclas internas: deja aire bajo la barra fija superior */
+  [id] { scroll-margin-top: 140px; }
+
+  /* Barra de categorías sin scrollbar visible */
+  .sin-scroll::-webkit-scrollbar { display: none; }
+  .sin-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Área segura en iOS para las barras inferiores */
+  .safe-bottom { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+
+  /* --- Micro-interacciones -------------------------------------------------- */
+
+  /* Entrada de vista: aparece con un leve desplazamiento hacia arriba */
+  .vista-entra { animation: vistaIn .45s cubic-bezier(.2,.8,.2,1) both; }
+  @keyframes vistaIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* Salida de vista */
+  .vista-sale { opacity: 0 !important; transform: translateY(-8px); transition: opacity .18s ease, transform .18s ease; }
+
+  /* Aparición con rebote (controles del carrito) */
+  .pop { animation: pop .32s cubic-bezier(.2,1.5,.4,1) both; }
+  @keyframes pop {
+    from { opacity: .3; transform: scale(.72); }
+    to   { opacity: 1;  transform: scale(1); }
+  }
+
+  /* Pulso del contador y del total cuando cambia */
+  .bump { animation: bump .45s cubic-bezier(.2,1.5,.4,1); }
+  @keyframes bump {
+    0%,100% { transform: scale(1); }
+    40%     { transform: scale(1.16); }
+  }
+
+  /* Error de dirección */
+  .shake { animation: shake .36s ease; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%     { transform: translateX(-6px); }
+    50%     { transform: translateX(6px); }
+    80%     { transform: translateX(-3px); }
+  }
+
+  /* Respeto por quien prefiere menos movimiento */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: .001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .001ms !important;
+    }
+  }
+</style>
+</head>
+
+<body class="bg-cream font-sans text-ink antialiased selection:bg-brand-200 selection:text-ink">
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     BARRA FIJA SUPERIOR · Toggle entre Plan Básico (Vista A) y Plan Premium (Vista B)
+     ══════════════════════════════════════════════════════════════════════════ -->
+<header class="fixed inset-x-0 top-0 z-40 border-b border-ink/5 bg-cream/85 backdrop-blur-xl">
+  <div class="mx-auto max-w-5xl px-3 pb-2 pt-2 sm:px-5">
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+
+      <!-- Identidad de la demo -->
+      <div class="flex items-center gap-2">
+        <span class="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-brand-400 to-brand-600 text-base shadow-sm">🍹</span>
+        <span class="leading-none">
+          <span class="block text-[13px] font-extrabold tracking-tight">Juguería Vladimir</span>
+          <span class="block text-[10px] font-bold uppercase tracking-[.14em] text-ink/40">Demo interactiva</span>
+        </span>
+      </div>
+
+      <!-- Toggle segmentado -->
+      <div class="sm:ml-auto sm:w-[320px]">
+        <div class="relative flex rounded-full bg-ink/[.06] p-1" role="group" aria-label="Elegir qué plan ver">
+          <span id="togglePastilla" aria-hidden="true"
+                class="absolute inset-y-1 left-1 rounded-full bg-white shadow-[0_3px_12px_-3px_rgba(36,28,23,.35)] transition-transform duration-[380ms] ease-[cubic-bezier(.22,1,.36,1)]"
+                style="width:calc(50% - 4px); transform:translateX(0)"></span>
+          <button type="button" data-plan="basico" aria-pressed="true"
+                  class="relative z-10 flex-1 rounded-full px-3 py-2 text-[12.5px] font-bold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400">
+            Plan Básico
+          </button>
+          <button type="button" data-plan="premium" aria-pressed="false"
+                  class="relative z-10 flex-1 rounded-full px-3 py-2 text-[12.5px] font-bold text-ink/50 transition-colors duration-200 hover:text-ink/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400">
+            Plan Premium
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pista de lo que se está viendo -->
+    <p id="pista" class="mt-1.5 text-center text-[11px] font-medium text-ink/50 sm:text-left">
+      Vista A · Landing informativa — el cliente solo puede llamar por teléfono
+    </p>
+  </div>
+</header>
+
+<main class="pt-[132px] sm:pt-[118px]">
+
+  <!-- ════════════════════════════════════════════════════════════════════════
+       VISTA A · LANDING INFORMATIVA (PLAN BÁSICO)
+       Contenido cálido y claro, sin carrito: solo llamadas.
+       ════════════════════════════════════════════════════════════════════════ -->
+  <section id="vista-a" aria-label="Vista A: landing informativa">
+    <div class="mx-auto max-w-5xl px-4 sm:px-5">
+
+      <!-- ── Hero: propuesta de valor + llamada ── -->
+      <div class="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-brand-500 via-brand-500 to-brand-700 px-5 py-8 text-white shadow-soft sm:px-10 sm:py-14">
+        <!-- Halos decorativos -->
+        <span class="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-white/15 blur-2xl"></span>
+        <span class="pointer-events-none absolute -bottom-24 -left-10 h-48 w-48 rounded-full bg-leaf-400/30 blur-2xl"></span>
+
+        <div class="relative grid items-center gap-8 sm:grid-cols-[1.1fr_.9fr]">
+          <div>
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-[10.5px] font-bold uppercase tracking-[.14em] ring-1 ring-inset ring-white/25">
+              Juguería de barrio · hecho al momento
+            </span>
+            <h1 class="mt-4 font-display text-[34px] font-black leading-[1.05] tracking-tight sm:text-5xl">
+              Jugos de fruta de verdad, preparados cuando los pides.
+            </h1>
+            <p class="mt-4 max-w-md text-[15px] leading-relaxed text-white/85">
+              Compramos la fruta en el mercado cada mañana, la cortamos al momento y licuamos a pedido.
+              Sin concentrados y sin azúcar escondida: fruta, hielo y ya.
+            </p>
+
+            <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
+              <!-- Contacto principal: abre el marcador del teléfono -->
+              <a href="tel:+51948221883"
+                 class="group inline-flex items-center gap-2.5 rounded-full bg-white px-6 py-3.5 text-[15px] font-extrabold text-brand-600 shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl active:translate-y-0 active:scale-[.98] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40">
+                <svg class="h-5 w-5 transition-transform duration-300 group-hover:-rotate-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                Llámanos
+              </a>
+
+              <!-- Contacto alterno: abre el chat de WhatsApp con un mensaje genérico, sin carrito -->
+              <a data-wa-chat href="#"
+                 class="group inline-flex items-center gap-2.5 rounded-full bg-white/15 px-6 py-3.5 text-[15px] font-extrabold text-white ring-1 ring-inset ring-white/40 transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/25 active:translate-y-0 active:scale-[.98] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.347-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.876 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                Escríbenos por WhatsApp
+              </a>
+
+              <a href="#carta" class="text-sm font-semibold text-white/90 underline decoration-white/40 underline-offset-4 transition hover:text-white hover:decoration-white">
+                Ver los jugos de hoy ↓
+              </a>
+            </div>
+
+            <p class="mt-4 text-[12px] text-white/70">Atendemos de lunes a sábado, de 7:00 a.m. a 9:00 p.m.</p>
+          </div>
+
+          <!-- Ilustración del vaso (placeholder estilizado) -->
+          <div class="mx-auto w-40 max-w-[200px] sm:w-full" id="hero-vaso"></div>
+        </div>
+      </div>
+
+      <!-- ── Quiénes somos ── -->
+      <div id="nosotros" class="mt-12 grid gap-6 sm:mt-16 sm:grid-cols-2 sm:items-center sm:gap-10">
+        <div>
+          <p class="text-[11px] font-bold uppercase tracking-[.16em] text-brand-600">Quiénes somos</p>
+          <h2 class="mt-2 font-display text-[28px] font-black leading-tight sm:text-4xl">
+            Una juguería pequeña, con fruta grande.
+          </h2>
+          <div class="mt-4 space-y-3 text-[15px] leading-relaxed text-ink/70">
+            <p>
+              Somos un negocio familiar. Cada mañana vamos al mercado a elegir la papaya, la piña y la
+              fresa que vamos a usar ese mismo día. Si la fruta no está dulce, no la compramos.
+            </p>
+            <p>
+              Preparamos todo al momento, delante de ti. Por eso no vendemos jugos embotellados ni
+              concentrados: lo que pides, se licúa cuando lo pides.
+            </p>
+          </div>
+
+          <div class="mt-6 grid grid-cols-3 gap-3">
+            <div class="rounded-2xl border border-ink/5 bg-white p-3 shadow-card">
+              <p class="font-display text-xl font-black text-brand-600">100%</p>
+              <p class="mt-0.5 text-[11px] font-semibold leading-tight text-ink/55">fruta fresca del día</p>
+            </div>
+            <div class="rounded-2xl border border-ink/5 bg-white p-3 shadow-card">
+              <p class="font-display text-xl font-black text-brand-600">0</p>
+              <p class="mt-0.5 text-[11px] font-semibold leading-tight text-ink/55">conservantes o colorantes</p>
+            </div>
+            <div class="rounded-2xl border border-ink/5 bg-white p-3 shadow-card">
+              <p class="font-display text-xl font-black text-brand-600">Hoy</p>
+              <p class="mt-0.5 text-[11px] font-semibold leading-tight text-ink/55">preparado a tu pedido</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bloque visual tipo foto del local -->
+        <div class="relative overflow-hidden rounded-[28px] border border-ink/5 p-6 shadow-card"
+             style="background-color:#FFFCF7;background-image:radial-gradient(130% 110% at 60% 0%, #FFE3C4, #F2FBF3)">
+          <div class="mx-auto w-32" id="about-vaso"></div>
+          <span class="absolute left-4 top-4 rounded-full bg-white/85 px-3 py-1 text-[10.5px] font-bold uppercase tracking-wider text-ink/60 backdrop-blur">
+            Fruta del día
+          </span>
+          <span class="absolute bottom-4 right-4 rounded-full bg-ink px-3 py-1.5 text-[11px] font-bold text-white shadow-soft">
+            Atención al público y delivery
+          </span>
+        </div>
+      </div>
+
+      <!-- ── Galería estática de los 3 más pedidos ── -->
+      <div id="carta" class="mt-14 sm:mt-20">
+        <div class="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p class="text-[11px] font-bold uppercase tracking-[.16em] text-brand-600">Nuestros favoritos</p>
+            <h2 class="mt-2 font-display text-[28px] font-black leading-tight sm:text-4xl">Los tres que más nos piden</h2>
+          </div>
+          <p class="text-[12px] font-medium text-ink/45">Precios de referencia del local</p>
+        </div>
+
+        <!-- Las tarjetas se generan desde la misma lista de productos (sin carrito) -->
+        <div id="galeria" class="mt-6 grid gap-4 sm:grid-cols-3"></div>
+
+        <!-- Cierre de la sección: única acción posible, llamar -->
+        <div class="mt-8 rounded-[28px] border border-ink/5 bg-white p-6 text-center shadow-card sm:p-8">
+          <h3 class="font-display text-xl font-black">¿Ya se te antojó uno?</h3>
+          <p class="mx-auto mt-2 max-w-md text-[14px] leading-relaxed text-ink/60">
+            Llámanos o escríbenos por WhatsApp y te lo tenemos listo. También coordinamos el delivery por chat si estás por la zona.
+          </p>
+          <a href="tel:+51948221883"
+             class="mt-5 inline-flex items-center gap-2.5 rounded-full bg-brand-500 px-6 py-3.5 text-[15px] font-extrabold text-white shadow-[0_12px_26px_-12px_rgba(244,112,31,.9)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-600 active:translate-y-0 active:scale-[.98] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-200">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            Llámanos
+          </a>
+
+          <!-- Segundo camino de contacto: solo abre el chat, sin carrito ni resumen -->
+          <a data-wa-chat href="#"
+             class="mt-3 flex w-full items-center justify-center gap-2.5 rounded-full bg-leaf-500 px-6 py-3.5 text-[15px] font-extrabold text-white shadow-[0_12px_26px_-12px_rgba(53,160,63,1)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-leaf-600 active:translate-y-0 active:scale-[.98] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-leaf-200 sm:mx-auto sm:w-auto">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.347-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.876 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+            Escríbenos por WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <!-- ── Pie de página con contacto ── -->
+      <footer class="mt-12 overflow-hidden rounded-[28px] bg-ink px-6 py-8 text-white/80 sm:mt-16 sm:px-10">
+        <div class="grid gap-6 sm:grid-cols-3">
+          <div>
+            <p class="font-display text-xl font-black text-white">Juguería Vladimir</p>
+            <p class="mt-2 text-[13px] leading-relaxed">Fruta fresca, jugos al momento y atención de barrio.</p>
+          </div>
+          <div>
+            <p class="text-[11px] font-bold uppercase tracking-[.16em] text-white/45">Dónde estamos</p>
+            <address class="mt-2 text-[13px] not-italic leading-relaxed">
+              Av. Los Álamos 123<br />Mercado Central, puesto 14<br />Referencia: frente a la loza deportiva
+            </address>
+          </div>
+          <div>
+            <p class="text-[11px] font-bold uppercase tracking-[.16em] text-white/45">Contáctanos</p>
+            <p class="mt-2 text-[13px] leading-relaxed">
+              <a href="tel:+51948221883" class="font-semibold text-white underline decoration-white/30 underline-offset-4 transition hover:decoration-white">+51 948 221 883</a><br />
+              Lunes a sábado<br />7:00 a.m. – 9:00 p.m.
+            </p>
+          </div>
+        </div>
+        <p class="mt-8 border-t border-white/10 pt-4 text-[11px] leading-relaxed text-white/40">
+          Demostración creada para el dueño del negocio. Dirección, teléfono y precios son de ejemplo y se reemplazan por los reales.
+        </p>
+      </footer>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════════════════
+       VISTA B · APP DE PEDIDOS DELIVERY (PLAN PREMIUM)
+       Catálogo dinámico + carrito persistente + pedido por WhatsApp.
+       ════════════════════════════════════════════════════════════════════════ -->
+  <section id="vista-b" class="hidden" aria-label="Vista B: app de pedidos">
+    <div class="mx-auto max-w-5xl px-4 pb-44 sm:px-5">
+
+      <!-- ── Portada: la misma promesa de la landing, en versión corta para no frenar la compra ── -->
+      <div class="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-brand-500 via-brand-500 to-brand-700 px-5 py-7 text-white shadow-soft sm:px-10 sm:py-11">
+        <span class="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-white/15 blur-2xl"></span>
+        <span class="pointer-events-none absolute -bottom-24 -left-10 h-48 w-48 rounded-full bg-leaf-400/30 blur-2xl"></span>
+
+        <div class="relative grid items-center gap-7 sm:grid-cols-[1.15fr_.85fr]">
+          <div>
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-[10.5px] font-bold uppercase tracking-[.14em] ring-1 ring-inset ring-white/25">
+              Abierto ahora · delivery en la zona
+            </span>
+            <h1 class="mt-3.5 font-display text-[30px] font-black leading-[1.06] tracking-tight sm:text-[42px]">
+              Jugos de fruta de verdad, preparados cuando los pides.
+            </h1>
+            <p class="mt-3 max-w-md text-[14.5px] leading-relaxed text-white/85">
+              Elige en tu celular, revisa el total y mándanos el pedido por WhatsApp. Nosotros lo preparamos y te lo llevamos.
+            </p>
+            <div class="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">
+              <button type="button" id="btnVerJugosPremium"
+                      class="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-[15px] font-extrabold text-brand-600 shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl active:translate-y-0 active:scale-[.98] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40">
+                Ver los jugos
+                <span class="transition-transform duration-300 group-hover:translate-y-0.5">↓</span>
+              </button>
+              <span class="text-[12px] font-semibold text-white/75">Pago al recibir · sin descargar nada</span>
+            </div>
+          </div>
+          <div class="mx-auto w-36 max-w-[180px] sm:w-full" id="premium-vaso"></div>
+        </div>
+      </div>
+
+      <!-- ── Quiénes somos: versión de dos líneas para no alejar al cliente del catálogo ── -->
+      <div class="mt-5 rounded-[28px] border border-ink/5 bg-white p-5 shadow-card sm:p-6">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div class="max-w-xl">
+            <p class="text-[11px] font-bold uppercase tracking-[.16em] text-brand-600">Quiénes somos</p>
+            <p class="mt-2 text-[14.5px] leading-relaxed text-ink/70">
+              Somos un negocio familiar. Compramos la fruta en el mercado cada mañana y la licuamos al momento:
+              sin concentrados y sin azúcar escondida.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-leaf-50 px-3 py-1.5 text-[11.5px] font-bold text-leaf-700 ring-1 ring-inset ring-leaf-100">✓ Fruta del día</span>
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-leaf-50 px-3 py-1.5 text-[11.5px] font-bold text-leaf-700 ring-1 ring-inset ring-leaf-100">✓ Sin conservantes</span>
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-leaf-50 px-3 py-1.5 text-[11.5px] font-bold text-leaf-700 ring-1 ring-inset ring-leaf-100">✓ Hecho al momento</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Encabezado + pasos del flujo (menos fricción, más claridad) -->
+      <div class="rounded-[28px] border border-ink/5 bg-white p-5 shadow-card sm:p-6">
+        <span class="inline-flex items-center gap-1.5 rounded-full bg-leaf-100 px-3 py-1 text-[10.5px] font-bold uppercase tracking-[.14em] text-leaf-700">
+          Plan Premium · pedidos por WhatsApp
+        </span>
+        <h2 class="mt-3 font-display text-[28px] font-black leading-tight sm:text-4xl">Arma tu pedido en medio minuto</h2>
+        <p class="mt-2 max-w-lg text-[15px] leading-relaxed text-ink/65">
+          Elige tus jugos, revisa el total y envíanos el pedido por WhatsApp. Sin descargar apps, sin crear cuenta y sin llamar.
+        </p>
+
+        <ol class="mt-5 grid gap-2 text-[12.5px] font-semibold text-ink/60 sm:grid-cols-3">
+          <li class="flex items-center gap-2 rounded-xl bg-ink/[.04] px-3 py-2">
+            <span class="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-brand-500 text-[11px] font-black text-white">1</span>
+            Elige tus jugos
+          </li>
+          <li class="flex items-center gap-2 rounded-xl bg-ink/[.04] px-3 py-2">
+            <span class="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-brand-500 text-[11px] font-black text-white">2</span>
+            Revisa tu total
+          </li>
+          <li class="flex items-center gap-2 rounded-xl bg-ink/[.04] px-3 py-2">
+            <span class="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-leaf-500 text-[11px] font-black text-white">3</span>
+            Envíalo por WhatsApp
+          </li>
+        </ol>
+      </div>
+
+      <!-- Filtros por categoría -->
+      <div class="sin-scroll mt-6 flex gap-2 overflow-x-auto pb-1" id="chips" role="group" aria-label="Filtrar por categoría"></div>
+
+      <!-- Catálogo dinámico -->
+      <div id="catalogo" class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-live="polite"></div>
+
+      <p class="mt-8 text-center text-[12px] leading-relaxed text-ink/45">
+        Pago al recibir. El pedido llega a tu WhatsApp y se confirma por chat.<br />
+        Demostración: los precios son de ejemplo.
+      </p>
+    </div>
+  </section>
+</main>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     STICKY CART · Barra flotante inferior (solo Vista B)
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div id="barra" class="pointer-events-none fixed inset-x-0 bottom-0 z-40 translate-y-[150%] opacity-0 transition-all duration-[420ms] ease-[cubic-bezier(.22,1,.36,1)]">
+  <div class="mx-auto max-w-5xl px-3 pt-2 safe-bottom">
+
+    <!-- Aviso: aparece si recuperamos un pedido guardado de una visita anterior -->
+    <div id="avisoCarrito" style="display:none"
+         class="mb-2 items-center gap-2.5 rounded-2xl bg-white px-3 py-2.5 shadow-soft ring-1 ring-inset ring-ink/5">
+      <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-leaf-50 text-[13px] text-leaf-600">↺</span>
+      <p class="flex-1 text-[12px] font-semibold leading-snug text-ink/70">Recuperamos el pedido que tenías armado.</p>
+      <button type="button" id="btnCerrarAvisoCarrito" aria-label="Cerrar aviso"
+              class="grid h-7 w-7 shrink-0 place-items-center rounded-full text-ink/40 transition hover:bg-ink/5 hover:text-ink active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/20">✕</button>
+    </div>
+
+    <div class="flex items-center gap-3 rounded-2xl bg-ink px-3 py-3 text-white shadow-[0_20px_45px_-18px_rgba(36,28,23,.75)]">
+
+      <!-- Zona izquierda: abre la hoja con el detalle del pedido -->
+      <button type="button" id="btnVerPedido"
+              class="flex min-w-0 items-center gap-3 rounded-xl px-1 py-0.5 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40">
+        <span class="relative grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/10">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span id="barraBadge" class="absolute -right-1.5 -top-1.5 grid h-5 min-w-[20px] place-items-center rounded-full bg-brand-500 px-1 text-[11px] font-black text-white">0</span>
+        </span>
+        <span class="min-w-0">
+          <span id="barraResumen" class="block truncate text-[11.5px] font-semibold text-white/55">Tu pedido está vacío</span>
+          <span id="barraTotal" class="block font-display text-[19px] font-black leading-tight">S/ 0.00</span>
+        </span>
+      </button>
+
+      <!-- Zona derecha: acción principal (cambia según haya o no productos) -->
+      <div class="ml-auto shrink-0">
+        <button type="button" id="btnPedirBarra" disabled
+                class="flex items-center gap-2 rounded-xl bg-white/10 px-4 py-3 text-[13.5px] font-extrabold text-white/40 transition-all duration-200 enabled:bg-leaf-500 enabled:text-white enabled:shadow-[0_10px_24px_-10px_rgba(53,160,63,1)] enabled:hover:-translate-y-0.5 enabled:hover:bg-leaf-600 enabled:active:translate-y-0 enabled:active:scale-[.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-leaf-300 disabled:cursor-not-allowed">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.347-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.876 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+          Pedir por WhatsApp
+        </button>
+        <button type="button" id="btnElegir" style="display:none"
+                class="rounded-xl bg-white/10 px-4 py-3 text-[13.5px] font-extrabold text-white transition hover:bg-white/20 active:scale-[.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40">
+          Elegir jugos
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     HOJA DE PEDIDO · Bottom sheet con el detalle y el envío final
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div id="fondoHoja" class="pointer-events-none fixed inset-0 z-40 bg-ink/45 opacity-0 backdrop-blur-[2px] transition-opacity duration-300"></div>
+
+<div id="hoja" role="dialog" aria-modal="true" aria-labelledby="hojaTitulo"
+     class="fixed inset-x-0 bottom-0 z-50 max-h-[88vh] translate-y-full overflow-y-auto rounded-t-[28px] bg-cream shadow-2xl transition-transform duration-[420ms] ease-[cubic-bezier(.22,1,.36,1)]">
+  <div class="mx-auto max-w-2xl px-5 pb-8 pt-3 safe-bottom sm:px-6">
+
+    <div class="mx-auto h-1.5 w-11 rounded-full bg-ink/15"></div>
+
+    <div class="mt-4 flex items-center justify-between gap-3">
+      <h3 id="hojaTitulo" class="font-display text-2xl font-black">Tu pedido</h3>
+      <div class="flex items-center gap-1">
+        <button type="button" id="btnVaciar" class="rounded-full px-3 py-2 text-[12px] font-bold text-ink/40 transition hover:bg-ink/5 hover:text-ink/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/20">
+          Vaciar
+        </button>
+        <button type="button" id="btnCerrarHoja" aria-label="Cerrar el detalle del pedido"
+                class="grid h-9 w-9 place-items-center rounded-full bg-ink/[.06] text-ink/60 transition hover:bg-ink/10 hover:text-ink active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/20">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Detalle dinámico -->
+    <ul id="hojaLista" class="mt-4 divide-y divide-ink/[.07]"></ul>
+
+    <!-- Entrega: por ahora solo hacemos delivery, así que se muestra como dato fijo -->
+    <div class="mt-5 flex items-center gap-3 rounded-2xl border border-ink/5 bg-white px-4 py-3 shadow-card">
+      <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-leaf-50 text-leaf-600 ring-1 ring-inset ring-leaf-100">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg>
+      </span>
+      <span>
+        <span class="block text-[13px] font-extrabold">Delivery a tu dirección</span>
+        <span class="block text-[11.5px] text-ink/50">Entregamos en la zona. Solo necesitamos tu dirección.</span>
+      </span>
+    </div>
+
+    <!-- Dirección: obligatoria porque todo pedido se entrega -->
+    <div id="campoDireccion" class="mt-4">
+      <div class="flex items-center justify-between gap-3">
+        <label for="direccion" class="block text-[11px] font-bold uppercase tracking-[.14em] text-ink/45">Dirección de entrega</label>
+        <!-- Chip de un toque: aparece solo si hay una dirección recordada y el campo está vacío -->
+        <button type="button" id="btnUsarDireccion" style="display:none"
+                class="rounded-full bg-brand-50 px-2.5 py-1 text-[11px] font-bold text-brand-700 ring-1 ring-inset ring-brand-100 transition hover:bg-brand-100 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300">
+          Usar la última
+        </button>
+      </div>
+      <input id="direccion" type="text" inputmode="text" autocomplete="street-address" placeholder="Ej. Av. Los Álamos 123, dpto 4B"
+             class="mt-2 w-full rounded-2xl border-2 border-ink/10 bg-white px-4 py-3 text-[14px] font-medium outline-none transition placeholder:text-ink/30 focus:border-brand-400 focus:ring-4 focus:ring-brand-100" />
+      <!-- Aviso: se ve cuando el campo trae exactamente la dirección recordada -->
+      <p id="avisoDireccion" class="mt-1.5 hidden text-[12px] font-semibold text-leaf-700">
+        Guardamos esta dirección para tu próximo pedido. Si cambió, edítala nomás.
+      </p>
+      <p id="errorDireccion" class="mt-1.5 hidden text-[12px] font-semibold text-red-600">Escribe tu dirección para poder enviar el pedido.</p>
+    </div>
+
+    <!-- Nota opcional -->
+    <div class="mt-4">
+      <label for="nota" class="block text-[11px] font-bold uppercase tracking-[.14em] text-ink/45">Nota para Vladimir <span class="font-semibold normal-case tracking-normal text-ink/35">(opcional)</span></label>
+      <input id="nota" type="text" placeholder="Ej. sin hielo, con poquita azúcar…"
+             class="mt-2 w-full rounded-2xl border-2 border-ink/10 bg-white px-4 py-3 text-[14px] font-medium outline-none transition placeholder:text-ink/30 focus:border-brand-400 focus:ring-4 focus:ring-brand-100" />
+    </div>
+
+    <!-- Total + acción -->
+    <div class="mt-5 flex items-center justify-between rounded-2xl bg-white px-4 py-3 shadow-card">
+      <span class="text-[13px] font-bold text-ink/55">Total a pagar</span>
+      <span id="hojaTotal" class="font-display text-2xl font-black tabular-nums">S/ 0.00</span>
+    </div>
+
+    <button type="button" id="btnPedirHoja" disabled
+            class="mt-3 flex w-full items-center justify-center gap-2.5 rounded-2xl bg-ink/10 px-6 py-4 text-[15px] font-extrabold text-ink/35 transition-all duration-200 enabled:bg-leaf-500 enabled:text-white enabled:shadow-[0_16px_32px_-14px_rgba(53,160,63,1)] enabled:hover:-translate-y-0.5 enabled:hover:bg-leaf-600 enabled:active:translate-y-0 enabled:active:scale-[.99] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-leaf-200 disabled:cursor-not-allowed">
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.347-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.876 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+      Pedir por WhatsApp
+    </button>
+
+    <button type="button" id="btnSeguir" class="mt-2 w-full rounded-2xl px-4 py-3 text-[13px] font-bold text-ink/50 transition hover:bg-ink/5 hover:text-ink/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/20">
+      Seguir eligiendo jugos
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     CONFIRMACIÓN FLOTANTE · Aparece después de enviar el pedido por WhatsApp
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div id="toastPedido" style="display:none" role="status"
+     class="pointer-events-none fixed inset-x-0 bottom-0 z-50 justify-center px-3 safe-bottom">
+  <div class="pointer-events-auto mx-auto flex w-full max-w-md items-center gap-3 rounded-2xl bg-ink px-4 py-3 text-white shadow-[0_20px_45px_-18px_rgba(36,28,23,.85)]">
+    <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-leaf-500 text-[15px] font-black">✓</span>
+    <p class="flex-1 text-[12.5px] font-semibold leading-snug">
+      <span class="block text-[13.5px] font-extrabold">¡Pedido enviado!</span>
+      Se abrió WhatsApp con tu pedido y el carrito quedó vacío.
+    </p>
+    <button type="button" id="btnCerrarToast" aria-label="Cerrar confirmación"
+            class="grid h-7 w-7 shrink-0 place-items-center rounded-full text-white/50 transition hover:bg-white/10 hover:text-white active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40">✕</button>
+  </div>
+</div>
+
+<!-- Región de anuncios para lectores de pantalla -->
+<p id="anuncio" class="sr-only" aria-live="polite"></p>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   1. DATOS DEL NEGOCIO  (cambia solo estas líneas para el cliente real)
+   ═══════════════════════════════════════════════════════════════════════════ */
+const NEGOCIO = {
+  nombre: 'Juguería Vladimir',
+  // Número de WhatsApp en formato internacional, SOLO dígitos.
+  whatsapp: '51948221883',
+  telefonoVisible: '+51 948 221 883'
+};
+
+/* Catálogo: precio en soles, cat = categoría, colores = degradado del vaso. */
+const JUGOS = [
+  { id:'papaya',    nombre:'Jugo de Papaya',     desc:'Papaya madura, agua y hielo. Sin azúcar añadida.',        precio:8,  cat:'Clásicos',  colores:['#FFC46B','#F4701F'], sorbete:'#F97316', destacado:true },
+  { id:'surtido',   nombre:'Surtido Clásico',    desc:'Papaya, piña, plátano y beterraga, el de siempre.',       precio:10, cat:'Clásicos',  colores:['#F79BC0','#B23A0C'], sorbete:'#FBBF24' },
+  { id:'naranja',   nombre:'Naranja Fresh',      desc:'Naranja recién exprimida, 100% fruta.',                   precio:9,  cat:'Clásicos',  colores:['#FFD166','#F59E0B'], sorbete:'#EF4444' },
+  { id:'fresa',     nombre:'Especial de Fresa',  desc:'Fresa, leche, algarrobina y miel.',                       precio:12, cat:'Especiales',colores:['#FDA4AF','#DC2626'], sorbete:'#F472B6', destacado:true },
+  { id:'tropical',  nombre:'Mixto Tropical',     desc:'Maracuyá, mango y piña con un toque de limón.',           precio:11, cat:'Especiales',colores:['#FDE68A','#EA8C00'], sorbete:'#22C55E' },
+  { id:'beterraga', nombre:'Beterraga Power',    desc:'Beterraga, zanahoria, naranja y jengibre.',               precio:11, cat:'Detox',     colores:['#C084FC','#7E22CE'], sorbete:'#A3E635' },
+  { id:'verde',     nombre:'Detox Verde',        desc:'Apio, pepino, manzana verde y jengibre.',                 precio:12, cat:'Detox',     colores:['#BBF7D0','#15803D'], sorbete:'#84CC16', destacado:true },
+  { id:'ensalada',  nombre:'Ensalada de Frutas', desc:'Frutas del día con yogurt natural y granola.',            precio:15, cat:'Bowls',     colores:['#FED7AA','#EA580C'], sorbete:'#FBBF24' }
+];
+
+const CATEGORIAS = ['Todos', 'Clásicos', 'Especiales', 'Detox', 'Bowls'];
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   2. ESTADO DE LA DEMO
+   ═══════════════════════════════════════════════════════════════════════════ */
+const estado = {
+  plan: 'basico',            // 'basico' (Vista A) | 'premium' (Vista B)
+  categoria: 'Todos',
+  carrito: {}                // { idDelJugo: cantidad }
+};
+
+/* Referencias del DOM usadas más de una vez */
+const $ = (sel) => document.querySelector(sel);
+const el = {
+  vistaA: $('#vista-a'),
+  vistaB: $('#vista-b'),
+  pista: $('#pista'),
+  pastilla: $('#togglePastilla'),
+  galeria: $('#galeria'),
+  chips: $('#chips'),
+  catalogo: $('#catalogo'),
+  barra: $('#barra'),
+  barraBadge: $('#barraBadge'),
+  barraResumen: $('#barraResumen'),
+  barraTotal: $('#barraTotal'),
+  btnPedirBarra: $('#btnPedirBarra'),
+  btnElegir: $('#btnElegir'),
+  btnVerPedido: $('#btnVerPedido'),
+  fondoHoja: $('#fondoHoja'),
+  hoja: $('#hoja'),
+  hojaLista: $('#hojaLista'),
+  hojaTotal: $('#hojaTotal'),
+  btnPedirHoja: $('#btnPedirHoja'),
+  btnCerrarHoja: $('#btnCerrarHoja'),
+  btnSeguir: $('#btnSeguir'),
+  btnVaciar: $('#btnVaciar'),
+  direccion: $('#direccion'),
+  errorDireccion: $('#errorDireccion'),
+  campoDireccion: $('#campoDireccion'),
+  btnUsarDireccion: $('#btnUsarDireccion'),
+  avisoDireccion: $('#avisoDireccion'),
+  avisoCarrito: $('#avisoCarrito'),
+  btnCerrarAvisoCarrito: $('#btnCerrarAvisoCarrito'),
+  toastPedido: $('#toastPedido'),
+  btnCerrarToast: $('#btnCerrarToast'),
+  nota: $('#nota'),
+  anuncio: $('#anuncio')
+};
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   3. UTILIDADES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Precio formateado en soles */
+const soles = (n) => 'S/ ' + n.toFixed(2);
+
+/* Jugo por id */
+const jugoPorId = (id) => JUGOS.find((j) => j.id === id);
+
+/* Artículos del carrito, en el orden del catálogo */
+function articulos() {
+  return JUGOS.filter((j) => estado.carrito[j.id]).map((j) => ({ jugo: j, cant: estado.carrito[j.id] }));
+}
+
+/* Total en céntimos para evitar errores de decimales */
+const totalCentimos = () => articulos().reduce((suma, { jugo, cant }) => suma + Math.round(jugo.precio * 100) * cant, 0);
+const totalSoles = () => totalCentimos() / 100;
+const totalUnidades = () => articulos().reduce((suma, { cant }) => suma + cant, 0);
+
+/* ── Dirección recordada (localStorage) ──────────────────────────────────────
+   Guardamos únicamente la última dirección usada, para que el cliente no la
+   vuelva a escribir. Si el navegador la bloquea, todo sigue funcionando. */
+const CLAVE_DIRECCION = 'jv_ultima_direccion';
+
+function leerDireccionGuardada() {
+  try { return (localStorage.getItem(CLAVE_DIRECCION) || '').trim(); }
+  catch (error) { return ''; }   // modo privado o almacenamiento bloqueado
+}
+
+function guardarDireccion(texto) {
+  try { localStorage.setItem(CLAVE_DIRECCION, texto); }
+  catch (error) { /* sin persistencia: no pasa nada */ }
+}
+
+/* Sincroniza el chip "Usar la última" y el aviso con lo que hay en el campo */
+function refrescarDireccion() {
+  const valor = el.direccion.value.trim();
+  const guardada = leerDireccionGuardada();
+  el.btnUsarDireccion.style.display = (!valor && guardada) ? '' : 'none';
+  el.avisoDireccion.classList.toggle('hidden', !(guardada && valor === guardada));
+}
+
+/* ── Pedido recordado (localStorage) ────────────────────────────────────────
+   El carrito se guarda en el navegador del cliente: si recarga la página o
+   cierra el navegador y vuelve, su pedido sigue armado. */
+const CLAVE_CARRITO = 'jv_carrito';
+const DIAS_DE_VIDA_DEL_PEDIDO = 7;   // pon un número muy alto si no quieres que caduque
+
+/* Bandera para avisar una sola vez que el pedido viene de una visita anterior */
+let avisoCarritoPendiente = false;
+let temporizadorAviso = null;
+let temporizadorToast = null;
+
+function guardarCarrito() {
+  try {
+    const items = {};
+    articulos().forEach(({ jugo, cant }) => { items[jugo.id] = cant; });
+    localStorage.setItem(CLAVE_CARRITO, JSON.stringify({ items, fecha: Date.now() }));
+  } catch (error) { /* sin persistencia: la demo sigue funcionando igual */ }
+}
+
+/* Devuelve solo los productos que siguen existiendo en la carta y con
+   cantidades válidas; descarta pedidos demasiado viejos. */
+function leerCarritoGuardado() {
+  try {
+    const crudo = JSON.parse(localStorage.getItem(CLAVE_CARRITO) || 'null');
+    if (!crudo || !crudo.items || typeof crudo.items !== 'object') return {};
+
+    const vencido = !Number.isFinite(crudo.fecha)
+      || (Date.now() - crudo.fecha) > DIAS_DE_VIDA_DEL_PEDIDO * 24 * 60 * 60 * 1000;
+    if (vencido) return {};
+
+    const items = {};
+    JUGOS.forEach((jugo) => {
+      const cant = Math.floor(Number(crudo.items[jugo.id]));
+      if (Number.isFinite(cant) && cant > 0) items[jugo.id] = Math.min(20, cant);
+    });
+    return items;
+  } catch (error) { return {}; }
+}
+
+function borrarCarritoGuardado() {
+  try { localStorage.removeItem(CLAVE_CARRITO); } catch (error) { /* nada */ }
+}
+
+function mostrarAvisoCarrito() {
+  el.avisoCarrito.style.display = 'flex';
+  clearTimeout(temporizadorAviso);
+  temporizadorAviso = setTimeout(ocultarAvisoCarrito, 8000);
+}
+
+function ocultarAvisoCarrito() {
+  clearTimeout(temporizadorAviso);
+  el.avisoCarrito.style.display = 'none';
+}
+
+/* Confirmación de que el pedido salió (y de que el carrito se vació) */
+function mostrarToastPedido() {
+  el.toastPedido.style.display = 'flex';
+  animar(el.toastPedido, 'vista-entra');
+  clearTimeout(temporizadorToast);
+  temporizadorToast = setTimeout(ocultarToastPedido, 6000);
+}
+
+function ocultarToastPedido() {
+  clearTimeout(temporizadorToast);
+  el.toastPedido.style.display = 'none';
+}
+
+/* La barra pegajosa solo se muestra en la Vista B y cuando hay algo en el carrito */
+function actualizarBarra() {
+  const visible = estado.plan === 'premium' && totalUnidades() > 0;
+  el.barra.classList.toggle('pointer-events-none', !visible);
+  el.barra.classList.toggle('opacity-0', !visible);
+  el.barra.classList.toggle('translate-y-[150%]', !visible);
+}
+
+/* Reinicia una animación CSS en un elemento ya existente */
+function animar(nodo, clase) {
+  if (!nodo) return;
+  nodo.classList.remove(clase);
+  void nodo.offsetWidth;          // fuerza reinicio
+  nodo.classList.add(clase);
+}
+
+/* Anuncia un cambio para lectores de pantalla */
+const anunciar = (texto) => { el.anuncio.textContent = texto; };
+
+/* Vaso de jugo: placeholder ilustrado con el degradado del producto.
+   `prefijo` evita ids de gradiente repetidos en el documento. */
+function vaso(jugo, prefijo) {
+  const idGrad = `${prefijo}-${jugo.id}`;
+  return `
+    <svg viewBox="0 0 120 140" class="h-full w-full drop-shadow-[0_10px_18px_rgba(36,28,23,.18)]" aria-hidden="true">
+      <defs>
+        <linearGradient id="${idGrad}" x1="0" y1="0" x2="0.4" y2="1">
+          <stop offset="0%" stop-color="${jugo.colores[0]}"/>
+          <stop offset="100%" stop-color="${jugo.colores[1]}"/>
+        </linearGradient>
+      </defs>
+      <ellipse cx="60" cy="133" rx="27" ry="5" fill="#241C17" opacity=".10"/>
+      <path d="M71 12 L79 64" stroke="${jugo.sorbete}" stroke-width="7" stroke-linecap="round" opacity=".95"/>
+      <path d="M33 31 L87 31 L80.5 121 Q79.8 129 71.5 129 L48.5 129 Q40.2 129 39.5 121 Z" fill="#ffffff" opacity=".55"/>
+      <path d="M35 34 L85 34 L78.6 120 Q78 127 70.5 127 L49.5 127 Q42 127 41.4 120 Z" fill="url(#${idGrad})"/>
+      <path d="M47 48 L51 110" stroke="#ffffff" stroke-width="6" stroke-linecap="round" opacity=".32"/>
+      <ellipse cx="60" cy="31" rx="27" ry="6.5" fill="#ffffff" opacity=".5"/>
+      <circle cx="89" cy="30" r="11" fill="${jugo.colores[1]}"/>
+      <circle cx="89" cy="30" r="7.5" fill="${jugo.colores[0]}" opacity=".9"/>
+    </svg>`;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   4. VISTA A · Inserta las ilustraciones y la galería estática
+   ═══════════════════════════════════════════════════════════════════════════ */
+$('#hero-vaso').innerHTML = vaso(jugoPorId('fresa'), 'hero');
+$('#about-vaso').innerHTML = vaso(jugoPorId('verde'), 'about');
+
+function renderGaleria() {
+  el.galeria.innerHTML = JUGOS.filter((j) => j.destacado).map((j) => `
+    <article class="group overflow-hidden rounded-[26px] border border-ink/5 bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-soft">
+      <div class="relative aspect-[5/4] overflow-hidden"
+           style="background-color:#FFFCF7;background-image:radial-gradient(130% 110% at 50% -10%, ${j.colores[0]}55, ${j.colores[1]}1f)">
+        <div class="absolute inset-0 grid place-items-center p-4 transition-transform duration-500 group-hover:scale-[1.07]">
+          ${vaso(j, 'dest')}
+        </div>
+      </div>
+      <div class="p-4">
+        <h3 class="font-display text-[17px] font-extrabold leading-tight">${j.nombre}</h3>
+        <p class="mt-1 text-[13px] leading-snug text-ink/55">${j.desc}</p>
+        <p class="mt-3 font-display text-lg font-black text-brand-600">${soles(j.precio)}</p>
+      </div>
+    </article>`).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   5. VISTA B · Chips de categoría y catálogo dinámico
+   ═══════════════════════════════════════════════════════════════════════════ */
+function renderChips() {
+  el.chips.innerHTML = CATEGORIAS.map((cat) => {
+    const activo = cat === estado.categoria;
+    return `<button type="button" data-cat="${cat}" aria-pressed="${activo}"
+      class="shrink-0 rounded-full px-4 py-2 text-[12.5px] font-bold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 ${
+        activo ? 'bg-ink text-white shadow-soft' : 'bg-white text-ink/60 ring-1 ring-inset ring-ink/10 hover:-translate-y-0.5 hover:text-ink'
+      }">${cat}</button>`;
+  }).join('');
+}
+
+/* Control de cantidad de cada tarjeta: botón "Agregar" o stepper - / + */
+function controlHTML(jugo) {
+  const cant = estado.carrito[jugo.id] || 0;
+
+  if (!cant) {
+    return `<button type="button" data-add="${jugo.id}" aria-label="Agregar ${jugo.nombre} al pedido"
+      class="pop inline-flex items-center gap-1.5 rounded-full bg-brand-500 px-4 py-2.5 text-[13px] font-extrabold text-white shadow-[0_8px_18px_-8px_rgba(244,112,31,.95)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-600 active:translate-y-0 active:scale-95 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-200">
+      Agregar <span class="text-base leading-none">+</span>
+    </button>`;
+  }
+
+  return `<div class="pop flex items-center gap-1 rounded-full bg-ink/[.06] p-1">
+    <button type="button" data-menos="${jugo.id}" aria-label="Quitar un ${jugo.nombre}"
+      class="grid h-8 w-8 place-items-center rounded-full bg-white text-lg font-bold text-ink shadow-sm transition duration-200 hover:bg-ink hover:text-white active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/30">−</button>
+    <span class="w-6 text-center text-[14px] font-black tabular-nums">${cant}</span>
+    <button type="button" data-mas="${jugo.id}" aria-label="Agregar otro ${jugo.nombre}"
+      class="grid h-8 w-8 place-items-center rounded-full bg-brand-500 text-lg font-bold text-white shadow-sm transition duration-200 hover:bg-brand-600 active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300">+</button>
+  </div>`;
+}
+
+function renderCatalogo() {
+  const lista = JUGOS.filter((j) => estado.categoria === 'Todos' || j.cat === estado.categoria);
+
+  el.catalogo.innerHTML = lista.map((j) => `
+    <article class="group flex flex-col overflow-hidden rounded-[26px] border border-ink/5 bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-soft">
+      <div class="relative aspect-[4/3] overflow-hidden"
+           style="background-color:#FFFCF7;background-image:radial-gradient(130% 110% at 50% -5%, ${j.colores[0]}55, ${j.colores[1]}1f)">
+        <span class="absolute left-3 top-3 rounded-full bg-white/85 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[.12em] text-ink/55 backdrop-blur">${j.cat}</span>
+        <div class="absolute inset-0 grid place-items-center p-4 transition-transform duration-500 group-hover:scale-[1.07]">
+          ${vaso(j, 'cat')}
+        </div>
+      </div>
+      <div class="flex flex-1 flex-col p-4">
+        <h3 class="font-display text-[17px] font-extrabold leading-tight">${j.nombre}</h3>
+        <p class="mt-1 flex-1 text-[13px] leading-snug text-ink/55">${j.desc}</p>
+        <div class="mt-3 flex items-center justify-between gap-2">
+          <span class="font-display text-[19px] font-black">${soles(j.precio)}</span>
+          <div id="ctrl-${j.id}">${controlHTML(j)}</div>
+        </div>
+      </div>
+    </article>`).join('');
+}
+
+/* Actualiza solo el control de una tarjeta (mantiene la animación viva) */
+function actualizarControl(id) {
+  const contenedor = document.getElementById('ctrl-' + id);
+  if (contenedor) contenedor.innerHTML = controlHTML(jugoPorId(id));
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   6. CARRITO · Barra fija, hoja de pedido y totales
+   ═══════════════════════════════════════════════════════════════════════════ */
+function cambiarCantidad(id, delta) {
+  const actual = estado.carrito[id] || 0;
+  const nueva = Math.max(0, Math.min(20, actual + delta));
+
+  if (nueva === 0) delete estado.carrito[id];
+  else estado.carrito[id] = nueva;
+
+  actualizarControl(id);
+  renderCarrito();
+  guardarCarrito();
+  if (delta > 0) anunciar(`${jugoPorId(id).nombre} agregado. Total ${soles(totalSoles())}`);
+}
+
+function renderCarrito() {
+  const unidades = totalUnidades();
+  const total = totalSoles();
+
+  /* --- Barra inferior --- */
+  el.barraBadge.textContent = unidades;
+  el.barraResumen.textContent = unidades === 0
+    ? 'Tu pedido está vacío'
+    : `${unidades} ${unidades === 1 ? 'producto' : 'productos'} en tu pedido`;
+  el.barraTotal.textContent = soles(total);
+
+  /* display en línea: la clase .flex de Tailwind gana al atributo [hidden] */
+  el.btnPedirBarra.style.display = unidades === 0 ? 'none' : '';
+  el.btnElegir.style.display = unidades === 0 ? '' : 'none';
+  el.btnVerPedido.disabled = unidades === 0;
+  actualizarBarra();
+
+  /* --- Hoja de pedido --- */
+  el.hojaLista.innerHTML = unidades === 0
+    ? `<li class="py-8 text-center text-[13.5px] font-medium text-ink/40">Todavía no agregaste ningún jugo.</li>`
+    : articulos().map(({ jugo, cant }) => `
+        <li class="flex items-center gap-3 py-3">
+          <span class="h-11 w-9 shrink-0">${vaso(jugo, 'hoja')}</span>
+          <span class="min-w-0 flex-1">
+            <span class="block truncate text-[13.5px] font-bold">${jugo.nombre}</span>
+            <span class="block text-[12px] font-semibold text-ink/45">${soles(jugo.precio)} c/u</span>
+          </span>
+          <span class="flex items-center gap-1 rounded-full bg-ink/[.06] p-1">
+            <button type="button" data-menos="${jugo.id}" aria-label="Quitar un ${jugo.nombre}"
+              class="grid h-7 w-7 place-items-center rounded-full bg-white text-base font-bold text-ink shadow-sm transition hover:bg-ink hover:text-white active:scale-90">−</button>
+            <span class="w-5 text-center text-[13px] font-black tabular-nums">${cant}</span>
+            <button type="button" data-mas="${jugo.id}" aria-label="Agregar otro ${jugo.nombre}"
+              class="grid h-7 w-7 place-items-center rounded-full bg-brand-500 text-base font-bold text-white shadow-sm transition hover:bg-brand-600 active:scale-90">+</button>
+          </span>
+          <span class="w-[68px] shrink-0 text-right text-[13px] font-black tabular-nums">${soles(jugo.precio * cant)}</span>
+        </li>`).join('');
+
+  el.hojaTotal.textContent = soles(total);
+  el.btnPedirHoja.disabled = unidades === 0;
+  el.btnVaciar.disabled = unidades === 0;
+  el.btnVaciar.classList.toggle('opacity-40', unidades === 0);
+
+  /* Pulso del contador y del total cuando el pedido cambia */
+  if (unidades > 0) {
+    animar(el.barraBadge, 'bump');
+    animar(el.barraTotal, 'bump');
+  }
+}
+
+/* Deja el pedido en cero. Se usa al vaciar a mano y después de enviar por
+   WhatsApp, así no quedan productos de un pedido ya hecho. */
+function limpiarPedido(mensaje) {
+  const ids = Object.keys(estado.carrito);
+  estado.carrito = {};
+  ids.forEach(actualizarControl);
+  renderCarrito();
+  borrarCarritoGuardado();
+  avisoCarritoPendiente = false;
+  ocultarAvisoCarrito();
+  anunciar(mensaje);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   7. HOJA DE PEDIDO (bottom sheet)
+   ═══════════════════════════════════════════════════════════════════════════ */
+function abrirHoja() {
+  el.fondoHoja.classList.remove('pointer-events-none', 'opacity-0');
+  el.hoja.classList.remove('translate-y-full');
+  document.body.style.overflow = 'hidden';
+
+  /* Recordatorio: si el campo está vacío, lo rellenamos con la última dirección */
+  const guardada = leerDireccionGuardada();
+  if (guardada && !el.direccion.value.trim()) {
+    el.direccion.value = guardada;
+    limpiarErrorDireccion();
+  }
+  refrescarDireccion();
+  /* A propósito no enfocamos la dirección: evita que se abra el teclado y
+     que la hoja se desplace sola apenas termina la animación. */
+}
+
+function cerrarHoja() {
+  el.fondoHoja.classList.add('pointer-events-none', 'opacity-0');
+  el.hoja.classList.add('translate-y-full');
+  document.body.style.overflow = '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   8. PEDIDO POR WHATSAPP
+   ═══════════════════════════════════════════════════════════════════════════ */
+function construirMensaje() {
+  const lineas = articulos();
+  const total = soles(totalSoles());
+  const resumen = lineas.map(({ jugo, cant }) => `${cant}x ${jugo.nombre}`).join(', ');
+
+  /* Primera línea: el resumen que Vladimir lee de un vistazo */
+  let msg = `Hola Vladimir, quiero pedir: ${resumen}. Total: ${total}\n\n`;
+  msg += `*Detalle del pedido*\n`;
+  lineas.forEach(({ jugo, cant }) => { msg += `• ${cant}x ${jugo.nombre} — ${soles(jugo.precio * cant)}\n`; });
+  msg += `\n*Total: ${total}*\n`;
+  msg += `\n*Entrega:* Delivery a domicilio`;
+  msg += `\n*Dirección:* ${el.direccion.value.trim()}`;
+
+  const nota = el.nota.value.trim();
+  if (nota) msg += `\n*Nota:* ${nota}`;
+
+  return msg;
+}
+
+/* Única función que abre WhatsApp con el pedido armado. Solo se llama
+desde el botón "Pedir por WhatsApp" (nunca desde un campo de texto). */
+function enviarWhatsApp() {
+  if (totalUnidades() === 0) return;
+
+  /* Validación en línea: la dirección es obligatoria (solo hacemos delivery) */
+  if (!el.direccion.value.trim()) {
+    marcarErrorDireccion();
+    return;
+  }
+  limpiarErrorDireccion();
+
+  /* URL de WhatsApp Web / app con el pedido ya escrito */
+  const url = `https://wa.me/${NEGOCIO.whatsapp}?text=${encodeURIComponent(construirMensaje())}`;
+  const ventana = window.open(url, '_blank');
+
+  /* Si el navegador bloqueó la pestaña, el pedido NO salió: lo conservamos
+     para que el cliente pueda reintentar sin volver a armarlo. */
+  if (!ventana) {
+    anunciar('No pudimos abrir WhatsApp. Revisa el bloqueo de ventanas emergentes.');
+    return;
+  }
+
+  /* Envío confirmado: guardamos la dirección para el próximo pedido,
+     cerramos la hoja y dejamos el carrito en cero */
+  guardarDireccion(el.direccion.value.trim());
+  refrescarDireccion();
+  limpiarPedido('Pedido enviado por WhatsApp. El carrito quedó vacío.');
+  cerrarHoja();
+  mostrarToastPedido();
+}
+
+/* Marca el campo de dirección como faltante */
+function marcarErrorDireccion() {
+  el.errorDireccion.classList.remove('hidden');
+  /* Estilo en línea: evita que otra clase de borde de Tailwind gane la pulseada */
+  el.direccion.style.borderColor = '#f87171';
+  el.direccion.style.boxShadow = '0 0 0 4px rgba(248,113,113,.18)';
+  el.direccion.focus({ preventScroll: false });
+  el.direccion.classList.add('shake');
+  setTimeout(() => el.direccion.classList.remove('shake'), 400);
+}
+
+/* Quita el estado de error del campo de dirección (solo toca estilos, no envía nada) */
+function limpiarErrorDireccion() {
+  el.errorDireccion.classList.add('hidden');
+  el.direccion.style.borderColor = '';
+  el.direccion.style.boxShadow = '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   9. TOGGLE ENTRE PLANES Y TRANSICIÓN DE VISTAS
+   ═══════════════════════════════════════════════════════════════════════════ */
+const PISTAS = {
+  basico:  'Vista A · Landing informativa — el cliente solo puede llamar por teléfono',
+  premium: 'Vista B · App de pedidos — el cliente arma su carrito y lo envía por WhatsApp'
+};
+
+function cambiarPlan(plan, animarTransicion = true) {
+  if (estado.plan === plan) return;
+  estado.plan = plan;
+
+  const saliente = plan === 'premium' ? el.vistaA : el.vistaB;
+  const entrante = plan === 'premium' ? el.vistaB : el.vistaA;
+
+  /* Estado visual del toggle */
+  document.querySelectorAll('[data-plan]').forEach((btn) => {
+    const activo = btn.dataset.plan === plan;
+    btn.setAttribute('aria-pressed', String(activo));
+    btn.classList.toggle('text-ink/50', !activo);
+    btn.classList.toggle('hover:text-ink/75', !activo);
+  });
+  el.pastilla.style.transform = `translateX(${plan === 'premium' ? '100%' : '0'})`;
+  el.pista.textContent = PISTAS[plan];
+
+  /* La barra del carrito solo vive en la Vista B */
+  actualizarBarra();
+
+  /* Si recuperamos un pedido al cargar, avisamos al entrar al plan Premium */
+  if (plan === 'premium' && avisoCarritoPendiente && totalUnidades() > 0) {
+    avisoCarritoPendiente = false;
+    mostrarAvisoCarrito();
+  }
+
+  if (plan === 'basico') cerrarHoja();
+
+  const intercambiar = () => {
+    saliente.classList.add('hidden');
+    saliente.classList.remove('vista-sale');
+    entrante.classList.remove('hidden');
+    animar(entrante, 'vista-entra');
+    window.scrollTo({ top: 0, behavior: animarTransicion ? 'smooth' : 'auto' });
+  };
+
+  if (animarTransicion) {
+    saliente.classList.add('vista-sale');
+    setTimeout(intercambiar, 180);
+  } else {
+    intercambiar();
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   10. EVENTOS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Toggle de planes (clic + teclado) */
+document.querySelectorAll('[data-plan]').forEach((btn) => {
+  btn.addEventListener('click', () => cambiarPlan(btn.dataset.plan));
+});
+
+/* Chips de categoría */
+el.chips.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-cat]');
+  if (!btn) return;
+  estado.categoria = btn.dataset.cat;
+  renderChips();
+  renderCatalogo();
+});
+
+/* Controles del catálogo y de la hoja: delegación de eventos */
+document.addEventListener('click', (e) => {
+  const mas = e.target.closest('[data-mas]');
+  const menos = e.target.closest('[data-menos]');
+  const add = e.target.closest('[data-add]');
+
+  if (add)   cambiarCantidad(add.dataset.add, 1);
+  if (mas)   cambiarCantidad(mas.dataset.mas, 1);
+  if (menos) cambiarCantidad(menos.dataset.menos, -1);
+});
+
+/* Abrir y cerrar la hoja de pedido */
+el.btnVerPedido.addEventListener('click', abrirHoja);
+el.btnCerrarHoja.addEventListener('click', cerrarHoja);
+el.fondoHoja.addEventListener('click', cerrarHoja);
+el.btnSeguir.addEventListener('click', cerrarHoja);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarHoja(); });
+
+/* Vaciar el pedido */
+el.btnVaciar.addEventListener('click', () => {
+  if (totalUnidades() === 0) return;
+  limpiarPedido('Pedido vaciado');
+});
+
+/* Cerrar el aviso de pedido recuperado y la confirmación de envío */
+el.btnCerrarAvisoCarrito.addEventListener('click', ocultarAvisoCarrito);
+el.btnCerrarToast.addEventListener('click', ocultarToastPedido);
+
+/* Al escribir: quitamos el error y recalculamos chip y aviso */
+el.direccion.addEventListener('input', () => {
+  if (el.direccion.value.trim()) limpiarErrorDireccion();
+  refrescarDireccion();
+});
+
+/* Un toque para reutilizar la última dirección recordada */
+el.btnUsarDireccion.addEventListener('click', () => {
+  el.direccion.value = leerDireccionGuardada();
+  limpiarErrorDireccion();
+  refrescarDireccion();
+  el.direccion.focus();
+});
+
+/* Enviar el pedido (desde la barra o desde la hoja) */
+el.btnPedirBarra.addEventListener('click', () => { abrirHoja(); });
+el.btnPedirHoja.addEventListener('click', enviarWhatsApp);
+el.btnElegir.addEventListener('click', () => {
+  el.catalogo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   11. ARRANQUE
+   ═══════════════════════════════════════════════════════════════════════════ */
+/* Portada del Plan Premium y salto directo al catálogo */
+$('#premium-vaso').innerHTML = vaso(jugoPorId('tropical'), 'premium');
+$('#btnVerJugosPremium').addEventListener('click', () => {
+  el.catalogo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+/* Enlaces de chat del Plan Básico: un solo lugar para el número del negocio.
+   Solo abren el chat con un mensaje genérico, sin carrito ni resumen del pedido. */
+document.querySelectorAll('[data-wa-chat]').forEach((enlace) => {
+  enlace.href = `https://wa.me/${NEGOCIO.whatsapp}?text=${encodeURIComponent('Hola Vladimir, quisiera pedir unos jugos.')}`;
+  enlace.target = '_blank';
+  enlace.rel = 'noopener';
+});
+
+/* Recuperamos el pedido guardado ANTES de pintar catálogo y carrito,
+   así los contadores y el total aparecen ya correctos. */
+estado.carrito = leerCarritoGuardado();
+avisoCarritoPendiente = totalUnidades() > 0;
+
+renderGaleria();
+renderChips();
+renderCatalogo();
+renderCarrito();
+refrescarDireccion();
+el.nota.value = '';
+el.direccion.value = '';
+</script>
+</body>
+</html>
