@@ -10,13 +10,17 @@
     --bg-alt: #0A101F;
     --ink: #EAF0FF;
     --ink-dim: rgba(234, 240, 255, 0.66);
-    --ink-faint: rgba(234, 240, 255, 0.44);
+    /* 0.44 daba 3.97:1 sobre la tarjeta glass; 0.54 sube a ~5.4:1 */
+    --ink-faint: rgba(234, 240, 255, 0.54);
     --line: rgba(255, 255, 255, 0.1);
     --violet: #8B7CFF;
     --cyan: #4FE0FF;
     --pink: #EC6BC8;
     --grad: linear-gradient(100deg, var(--violet) 0%, var(--cyan) 100%);
     --grad-soft: linear-gradient(100deg, rgba(139, 124, 255, 0.14), rgba(79, 224, 255, 0.14));
+    /* Tinta sobre superficies pintadas con --grad. El gradiente se mantiene brillante,
+       así que el texto se oscurece en el tema oscuro (blanco sobre el cian daba 1.56:1). */
+    --on-accent: #070B16;
     --glass: rgba(255, 255, 255, 0.045);
     --glass-strong: rgba(255, 255, 255, 0.07);
     --font-display: 'Sora', system-ui, sans-serif;
@@ -32,13 +36,19 @@
     --bg-alt: #EAEFF9;
     --ink: #0E1424;
     --ink-dim: rgba(14, 20, 36, 0.7);
-    --ink-faint: rgba(14, 20, 36, 0.46);
+    /* 0.46 daba 2.99:1 sobre --bg-alt; 0.64 sube a ~5.2:1 */
+    --ink-faint: rgba(14, 20, 36, 0.64);
     --line: rgba(14, 20, 36, 0.1);
     --violet: #6D5AE0;
     --cyan: #0891B2;
     --pink: #C026A9;
-    --grad: linear-gradient(100deg, #6D5AE0 0%, #0891B2 100%);
+    /* Los dos extremos de --grad se oscurecen sólo dentro del gradiente: como tinta sobre
+       los fondos claros del tema, #0891B2 daba 3.2:1 y #6D5AE0 4.35:1 (labels, fechas,
+       badges, strong y enlaces son texto pequeño). También deja blanco encima del CTA.
+       --violet y --cyan siguen brillantes para bordes, orbes y el punto de "disponible". */
+    --grad: linear-gradient(100deg, #6150D8 0%, #0D6E88 100%);
     --grad-soft: linear-gradient(100deg, rgba(109, 90, 224, 0.1), rgba(8, 145, 178, 0.1));
+    --on-accent: #FFFFFF;
     --glass: rgba(255, 255, 255, 0.75);
     --glass-strong: rgba(255, 255, 255, 0.92);
 }
@@ -68,7 +78,7 @@ img { display: block; }
 .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 .display { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.025em; line-height: 1.1; text-wrap: balance; }
 
-.skip-link { position: fixed; top: -100px; left: 12px; z-index: 300; background: var(--violet); color: #fff; padding: 10px 18px; font-family: var(--font-mono); font-size: 0.78rem; text-decoration: none; border-radius: 10px; }
+.skip-link { position: fixed; top: -100px; left: 12px; z-index: 300; background: var(--grad); color: var(--on-accent); padding: 10px 18px; font-family: var(--font-mono); font-size: 0.78rem; text-decoration: none; border-radius: 10px; }
 
 /* --- Scroll progress (animate) --- */
 /* Propósito: indicación de estado (progreso de lectura), no un evento; sigue el gesto 1:1. */
@@ -110,7 +120,7 @@ img { display: block; }
     padding: 8px 14px; border-radius: 10px; transition: color 0.2s ease, background 0.2s ease;
 }
 .links a:hover, .links a.active { color: var(--ink); background: var(--glass); }
-.links a.cta { background: var(--grad); color: #fff; font-weight: 600; }
+.links a.cta { background: var(--grad); color: var(--on-accent); font-weight: 600; }
 .links a.cta:hover { box-shadow: 0 6px 24px rgba(139, 124, 255, 0.4); }
 
 .right { display: flex; align-items: center; gap: 10px; }
@@ -134,7 +144,9 @@ img { display: block; }
 .nav-mobile a:hover { color: var(--violet); }
 
 /* --- Hero --- */
-.hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 130px 24px 90px; position: relative; overflow: hidden; }
+/* El padding inferior reserva la franja del scroll-hint (68px + 30px de separación):
+   con 90px la caja del hint solapaba 8px la de los botones cuando 100vh no alcanzaba. */
+.hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 130px 24px 110px; position: relative; overflow: hidden; }
 
 .hero-bg { position: absolute; inset: 0; pointer-events: none; }
 .orb { position: absolute; border-radius: 50%; filter: blur(110px); }
@@ -176,7 +188,7 @@ img { display: block; }
     letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; cursor: pointer;
     transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease), border-color 0.25s ease;
 }
-.btn-primary { background: var(--grad); color: #fff; font-weight: 600; }
+.btn-primary { background: var(--grad); color: var(--on-accent); font-weight: 600; }
 .btn-ghost { border: 1px solid var(--line); color: var(--ink); background: var(--glass); backdrop-filter: blur(8px); }
 .btn-ghost:hover { border-color: var(--violet); color: var(--violet); }
 
@@ -237,11 +249,21 @@ html:not(.js) .reveal { opacity: 1; transform: none; }
 .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .project-card { border-radius: var(--radius); overflow: hidden; transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), border-color 0.3s ease; }
 .project-card:hover { box-shadow: 0 0 0 1px rgba(139, 124, 255, 0.35); }
-.shot { overflow: hidden; }
-.shot img { width: 100%; height: 210px; object-fit: cover; object-position: top; filter: saturate(0.95); transition: transform 0.5s var(--ease); }
+/* Mini-galería: dos vistas del mismo proyecto separadas por un hairline de 1px (--line, como el resto de bordes).
+   Columnas idénticas (gap, no border) para que ambos marcos midan lo mismo y no quede sliver al pie de la 2ª captura.
+   El marco fija el ratio 16/9 (≈ el de las capturas, 1.70–1.94) para que object-fit: cover recorte lo mínimo. */
+.shot { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; position: relative; }
+.shot::after { content: ''; position: absolute; top: 0; bottom: 0; left: calc(50% - 0.5px); width: 1px; background: var(--line); pointer-events: none; }
+.shot-frame { position: relative; overflow: hidden; aspect-ratio: 16 / 9; }
+.shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; filter: saturate(0.95); transition: transform 0.5s var(--ease); }
 
 /* Emil: revelado de captura con clip-path al entrar la sección (una escena, no fade genérico) */
-.projects-grid .shot img { transform: scale(1.06); clip-path: inset(0 0 100% 0); transition: clip-path 750ms var(--ease) 120ms, transform 500ms var(--ease); }
+.projects-grid .shot img { transform: scale(1.06); clip-path: inset(0 0 100% 0); transition: clip-path 750ms var(--ease) var(--shot-delay, 120ms), transform 500ms var(--ease); }
+/* Cascada de lectura: vista 1 → vista 2 → siguiente proyecto, 120ms de paso */
+.project-card:nth-child(1) .shot-frame:nth-child(1) img { --shot-delay: 120ms; }
+.project-card:nth-child(1) .shot-frame:nth-child(2) img { --shot-delay: 240ms; }
+.project-card:nth-child(2) .shot-frame:nth-child(1) img { --shot-delay: 360ms; }
+.project-card:nth-child(2) .shot-frame:nth-child(2) img { --shot-delay: 480ms; }
 .projects-grid.visible .shot img { transform: scale(1); clip-path: inset(0 0 0 0); }
 /* Sin JS, la captura siempre visible */
 html:not(.js) .projects-grid .shot img { clip-path: inset(0 0 0 0); transform: none; }
@@ -254,7 +276,8 @@ html:not(.js) .projects-grid .shot img { clip-path: inset(0 0 0 0); transform: n
 .tags { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
 .tags li { font-size: 0.72rem; color: var(--ink-dim); border: 1px solid var(--line); border-radius: 20px; padding: 4px 10px; }
 .p-links { display: flex; gap: 16px; flex-wrap: wrap; }
-.link { color: var(--ink-dim); text-decoration: none; font-size: 0.86rem; font-weight: 500; }
+/* padding vertical: la caja medía 61x23 y el mínimo AA de puntero (WCAG 2.5.8) es 24x24 */
+.link { color: var(--ink-dim); text-decoration: none; font-size: 0.86rem; font-weight: 500; padding: 3px 0; }
 .link:hover { color: var(--violet); }
 .link-solid { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 700; }
 
@@ -356,7 +379,6 @@ html:not(.js) .hero-content > * { animation: none; }
     .hero { padding: 120px 18px 80px; }
     .skills-grid { grid-template-columns: 1fr; }
     .stat-strip { grid-template-columns: 1fr 1fr; }
-    .shot img { height: 180px; }
     .contact-grid { flex-direction: column; align-items: center; }
     .scroll-hint { display: none; }
 }

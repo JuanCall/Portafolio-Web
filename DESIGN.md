@@ -6,17 +6,23 @@ colors:
   bg-alt: "#0A101F"
   ink: "#EAF0FF"
   ink-dim: "rgba(234,240,255,0.66)"
-  ink-faint: "rgba(234,240,255,0.44)"
+  ink-faint: "rgba(234,240,255,0.54)"
   line: "rgba(255,255,255,0.10)"
   violet: "#8B7CFF"
   cyan: "#4FE0FF"
   pink: "#EC6BC8"
   grad: "linear-gradient(100deg,#8B7CFF,#4FE0FF)"
+  on-accent: "#070B16"
   glass: "rgba(255,255,255,0.045)"
   bg-light: "#F3F6FC"
+  bg-alt-light: "#EAEFF9"
   ink-light: "#0E1424"
+  ink-dim-light: "rgba(14,20,36,0.70)"
+  ink-faint-light: "rgba(14,20,36,0.64)"
   violet-light: "#6D5AE0"
   cyan-light: "#0891B2"
+  grad-light: "linear-gradient(100deg,#6150D8,#0D6E88)"
+  on-accent-light: "#FFFFFF"
 typography:
   display:
     fontFamily: "Sora, system-ui, sans-serif"
@@ -56,7 +62,7 @@ spacing:
 components:
   button-primary:
     backgroundColor: "{colors.grad}"
-    textColor: "#FFFFFF"
+    textColor: "{colors.on-accent}"
     rounded: "12px"
     padding: "14px 28px"
   button-primary-hover:
@@ -107,19 +113,58 @@ La personalidad es de software de alta gama: limpio, confiable, con elevación s
 ### Primary (Acento)
 - **Violeta** (`#8B7CFF`) y **Cian** (`#4FE0FF`): los dos extremos del gradiente de marca. Se aplican juntos como `linear-gradient(100deg, #8B7CFF, #4FE0FF)` sobre texto (con `background-clip: text`) y sobre fondos de acción primaria.
 - **Rosa** (`#EC6BC8`): solo como tercer orbe de fondo, muy atenuado.
+- **En el tema claro los extremos de `--grad` divergen a propósito de los tokens decorativos.** `--grad` usa `#6150D8 → #0D6E88`, más oscuros que `--violet` (`#6D5AE0`) y `--cyan` (`#0891B2`). No es inconsistencia: `--violet` y `--cyan` viven en bordes, orbes y el punto de "disponible", donde nunca llevan texto encima; `--grad` sí es tinta y superficie de botón, y ahí los valores brillantes se quedaban en 3.19:1 y 4.35:1 (ver Contrast). Si mueves un extremo del gradiente, mueve también el otro y vuelve a medir.
 
 ### Neutral
 - **Medianoche** (`#070B16`): fondo del sitio; `#0A101F` para secciones alternas.
 - **Tinta** (`#EAF0FF`): texto principal.
-- **Tinta atenuada** (`rgba(234,240,255,0.66)`): párrafos y descripciones, ≥ 4.5:1.
-- **Tinta tenue** (`rgba(234,240,255,0.44)`): labels y metadatos.
+- **Tinta atenuada** (`rgba(234,240,255,0.66)`): párrafos y descripciones. Medida: 7.22:1–7.71:1 en oscuro, 6.40:1–6.79:1 en claro.
+- **Tinta tenue** (`rgba(234,240,255,0.54)`): tercera jerarquía — años de proyecto, copyright, label del hint de scroll. Medida: 5.26:1–5.44:1 en oscuro, 5.23:1–5.49:1 en claro.
 - **Línea** (`rgba(255,255,255,0.10)`): bordes del vidrio.
 - **Cristal** (`rgba(255,255,255,0.045)`): relleno de tarjetas glass; `rgba(255,255,255,0.07)` para estados reforzados.
+- **Tinta sobre acento** (`--on-accent`: `#070B16` en oscuro, `#FFFFFF` en claro): el único color de texto admitido sobre una superficie pintada con `--grad`.
 
 ### Named Rules
 **La Regla del Cristal.** Las superficies son vidrio: translúcidas, con blur y borde de 1px sutil, nunca rellenos opacos ni negros puros.
 
 **La Regla del Gradiente.** El gradiente violeta→cian se reserva para acentos de marca (nombre en el hero, secciones destacadas, badges, números, botón primario, enlaces fuertes). Nunca se aplica como fondo de bloque grande.
+
+**La Regla de un Solo Rol por Gradiente.** `--grad` cumple dos roles y cada uno impone una condición distinta: como **tinta** (con `background-clip: text`) necesita extremos suficientemente oscuros sobre fondos claros; como **superficie** necesita encima una tinta que contraste con ambos extremos. Un rol no se arregla moviendo el otro: si un CTA no contrasta, se cambia la tinta (`--on-accent`), no el gradiente.
+
+**La Regla de la Tinta sobre Acento.** Sobre `--grad` solo se usa `--on-accent`. En oscuro es tinta oscura, porque el gradiente ya es brillante; en claro es blanca, porque el gradiente es profundo. Texto blanco sobre el gradiente oscuro daba 1.56:1.
+
+## Contrast
+
+**Objetivo:** WCAG 2.1 AA — 4.5:1 en texto normal y 3:1 en texto grande (≥ 24px, o ≥ 18.66px en negrita). Todo el texto se mide **compuesto sobre su fondo real**: las tintas son `rgba()`, así que su contraste depende del fondo que tengan debajo (medianoche, sección alterna o tarjeta glass con su propio blanco translúcido).
+
+### Medición de referencia
+
+| Token | Oscuro (peor caso) | Claro (peor caso) |
+| --- | --- | --- |
+| `--ink` | 15.19:1 | 15.92:1 |
+| `--ink-dim` | 7.22:1 | 6.40:1 |
+| `--ink-faint` | 5.26:1 | 5.23:1 |
+| `--grad` como tinta (extremo violeta) | 5.30:1 | 4.99:1 |
+| `--on-accent` sobre `--grad` | 6.01:1 | 5.76:1 |
+
+Mínimo global del sitio: **5.30:1** en tema oscuro y **4.99:1** en claro, sobre 120 elementos de texto y 4 viewports por tema (1280 / 1024 / 768 / 390).
+
+### Casos corregidos y su causa
+
+| Síntoma | Valor que tenía | Causa | Corrección |
+| --- | --- | --- | --- |
+| CTA con texto blanco | 1.56:1 (oscuro) · 3.68:1 (claro) | blanco sobre el extremo cian del gradiente | tinta `--on-accent`: oscura en oscuro, blanca en claro |
+| Labels, fechas, badges y enlaces en claro | 3.19:1–3.61:1 | `#0891B2` como tinta sobre fondos claros | extremos de `--grad` claro a `#6150D8 → #0D6E88` |
+| Labels sobre sección alterna | 4.35:1 | `#6D5AE0` al límite sobre `--bg-alt` | igual que la fila anterior |
+| Años, copyright y hint de scroll | 3.95:1 (oscuro) · 2.99:1 (claro) | `--ink-faint` demasiado tenue | alfa 0.44 → 0.54 (oscuro) y 0.46 → 0.64 (claro) |
+| Skip link | 3.27:1 | blanco sobre `--violet` | fondo `--grad` + tinta `--on-accent` |
+
+### Named Rules
+**La Regla del Contraste Medido.** Ningún token de tinta se aprueba por su valor en el `:root`, sino por su peor caso compuesto. Tocar `--bg`, `--bg-alt`, `--glass` o cualquier extremo de `--grad` obliga a volver a medir las cuatro combinaciones de tema × fondo.
+
+**La Regla del Techo del Tinte Tenue.** En el tema claro, `--ink-faint` no puede bajar de alfa ≈ 0.63: por debajo, sobre `--bg-alt`, sale de AA. Si hace falta una jerarquía más tenue, hay que bajar el fondo, no la tinta.
+
+**La Regla del Texto Grande.** Los acentos de gradiente pueden quedarse brillantes solo en texto grande (nombre del hero, números de las métricas), donde el umbral es 3:1. En texto pequeño —labels de 0.72–0.8rem, badges, fechas, enlaces— el gradiente va oscuro.
 
 ## Typography
 
@@ -166,7 +211,7 @@ Esquinas suaves pero contenidas: **18px** en tarjetas grandes y glass, **10–12
 - **Estado:** hover con `translateY(-4..-8px)` y sombra violeta; borde violeta en hover de proyectos.
 
 ### Botones
-- **Primario (`.btn-primary`):** fondo gradiente violeta→cian, texto blanco, radio 12px, mono mayúsculas; hover eleva con glow violeta.
+- **Primario (`.btn-primary`):** fondo gradiente violeta→cian, texto **`--on-accent`** (nunca blanco fijo: el gradiente oscuro no lo aguanta), radio 12px, mono mayúsculas; hover eleva con glow violeta.
 - **Ghost (`.btn-ghost`):** glass + borde línea; hover tiñe el borde de violeta.
 - **Focus:** `:focus-visible` con outline de 2px violeta.
 
@@ -174,7 +219,7 @@ Esquinas suaves pero contenidas: **18px** en tarjetas grandes y glass, **10–12
 - **Estilo:** píldora, fondo `rgba(255,255,255,0.06)`, borde línea, mono 0.78rem, icono 18px; hover tiñe el borde de violeta y aclara el texto.
 
 ### Navbar (`.navbar`)
-- **Estilo:** fijo, transparente hasta el scroll; al hacer scroll: glass con blur 18px y sombra sutil. Logo "JCR." con el punto en gradiente; CTA con gradiente.
+- **Estilo:** fijo, transparente hasta el scroll; al hacer scroll: glass con blur 18px y sombra sutil. Logo "JCR." con el punto en gradiente; CTA con gradiente y tinta `--on-accent`.
 
 ### Timeline (`.timeline`)
 - **Estilo:** línea vertical, nodos circulares con borde violeta y glow `rgba(139,124,255,0.5)`; fechas en mono con gradiente.
@@ -190,6 +235,8 @@ Esquinas suaves pero contenidas: **18px** en tarjetas grandes y glass, **10–12
 - **Do** usar Sora para títulos y JetBrains Mono para labels y datos tabulares.
 - **Do** elevar con hover suave y luz violeta (La Regla del Hover Suave).
 - **Do** conservar SEO, Google Analytics, accesibilidad (skip-link, focus, reduced-motion) y el modo claro con `prefers-color-scheme`.
+- **Do** usar `--on-accent` para cualquier texto sobre `--grad`, y `--ink-faint` para la tercera jerarquía de tinta (ya cumple AA en los dos temas).
+- **Do** volver a medir el contraste tras tocar un fondo o un extremo del gradiente (La Regla del Contraste Medido).
 
 ### Don't:
 - **Don't** usar negro puro como relleno de tarjetas ni sombras duras.
@@ -197,3 +244,5 @@ Esquinas suaves pero contenidas: **18px** en tarjetas grandes y glass, **10–12
 - **Don't** introducir serif u otras display; Sora es la única voz display.
 - **Don't** usar radios orgánicos ni formas libres.
 - **Don't** separar secciones con iconos decorativos que no aporten significado; los labels mono con numeración cumplen esa función.
+- **Don't** poner texto blanco sobre `--grad` en el tema oscuro (1.56:1), ni usar `--cyan` como color de texto pequeño sobre fondos claros (3.19:1).
+- **Don't** bajar `--ink-faint` por debajo de alfa 0.54 (oscuro) / 0.64 (claro), ni usar `--violet` o `--cyan` como color de texto pequeño.

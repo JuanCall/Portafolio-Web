@@ -153,7 +153,7 @@
             <div class="stack mono">React · Node.js · React Native · Firebase</div>
             <div class="btns">
                 <a href="#proyectos" class="btn btn-primary">Ver proyectos</a>
-                <a href="docs/CV - Calle Rosales.docx" download class="btn btn-ghost">Descargar CV</a>
+                <a href="docs/CV - Calle Rosales.pdf" download class="btn btn-ghost">Descargar CV</a>
             </div>
         </div>
         <div class="scroll-hint" aria-hidden="true"><span class="mono">scroll</span><i></i></div>
@@ -250,11 +250,14 @@
                 <h2 class="sec-title">Proyectos</h2>
                 <div class="projects-grid reveal">
                     <article class="project-card glass">
-                        <div class="shot"><img src="img/SistemaPOS_Calletano.jpg" alt="Captura del sistema Calletano POS" loading="lazy" decoding="async" width="640" height="360"></div>
+                        <div class="shot">
+                            <div class="shot-frame"><img src="img/SistemaPOSCuadriculaMesas.jpg" alt="Cuadrícula de mesas del salón en Calletano POS" loading="lazy" decoding="async" width="640" height="360"></div>
+                            <div class="shot-frame"><img src="img/SistemaPOSGraficoAnalitica.jpg" alt="Dashboard de analítica y ventas de Calletano POS" loading="lazy" decoding="async" width="640" height="360"></div>
+                        </div>
                         <div class="p-body">
                             <div class="p-top"><span class="badge mono">FLAGSHIP</span><span class="p-year mono">2026</span></div>
                             <h3>Calletano POS</h3>
-                            <p>Sistema de Punto de Venta para Restaurantes con tres componentes sincronizados en tiempo real: caja de escritorio (Electron + React), app móvil POS-Mozo (React Native/Expo/TypeScript) y web. API REST y tiempo real con Socket.IO sobre SQLite, autenticación segura (bcrypt), validación (Zod) y logging (Winston). Gestión de salón, cobros mixtos, boletas con QR SUNAT, arqueo de caja, dashboard gerencial (Chart.js), inventario, delivery, club de clientes e instalador de Windows (NSIS).</p>
+                            <p>Módulo administrativo (POS): centraliza la operación del restaurante en un solo flujo sincronizado. Caja de escritorio (Electron + React), app móvil para mozos (React Native) y panel web sobre una API REST con Socket.IO y SQLite. Cubre salón y mesas, cobros mixtos, boletas con QR SUNAT, arqueo de caja, inventario y dashboard gerencial con Chart.js.</p>
                             <ul class="tags mono"><li>React</li><li>Node.js</li><li>Electron</li><li>Socket.IO</li><li>SQLite</li><li>Chart.js</li></ul>
                             <div class="p-links">
                                 <a href="https://github.com/JuanCall/Web-Calletano-Restaurant" target="_blank" rel="noopener noreferrer" class="link">Código →</a>
@@ -262,11 +265,14 @@
                         </div>
                     </article>
                     <article class="project-card glass">
-                        <div class="shot"><img src="img/Web-CalletanoRestaurant.jpg" alt="Captura del sitio Calletano Web" loading="lazy" decoding="async" width="640" height="360"></div>
+                        <div class="shot">
+                            <div class="shot-frame"><img src="img/PortadaWebCalletano.jpg" alt="Portada del sitio web de Calletano Restaurant" loading="lazy" decoding="async" width="640" height="360"></div>
+                            <div class="shot-frame"><img src="img/EspecialesWebCalletano.jpg" alt="Página de especiales y menú digital de Calletano Web" loading="lazy" decoding="async" width="640" height="360"></div>
+                        </div>
                         <div class="p-body">
                             <div class="p-top"><span class="badge mono">EN VIVO</span><span class="p-year mono">2026</span></div>
                             <h3>Calletano Web</h3>
-                            <p>Sitio público del restaurante con menú digital: carta y menú del día en línea, precios y estado abierto/cerrado en tiempo real desde Firestore, y pedidos directos por WhatsApp. SEO técnico (Schema.org, Open Graph, sitemap.xml, robots.txt) y diseño mobile-first, desplegado en Firebase Hosting.</p>
+                            <p>Módulo web público: la cara del restaurante hacia el cliente, con carta y menú del día, disponibilidad y estado abierto/cerrado en tiempo real desde Firestore, y pedidos directos por WhatsApp. Diseño mobile-first con SEO técnico (Schema.org, Open Graph, sitemap) sobre Firebase Hosting.</p>
                             <ul class="tags mono"><li>JavaScript</li><li>Firebase</li><li>Bootstrap 5</li><li>SEO</li></ul>
                             <div class="p-links">
                                 <a href="https://github.com/JuanCall/Web-Calletano-Restaurant" target="_blank" rel="noopener noreferrer" class="link">Código →</a>
