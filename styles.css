@@ -281,11 +281,6 @@ html:not(.js) .projects-grid .shot img { clip-path: inset(0 0 0 0); transform: n
 .link:hover { color: var(--violet); }
 .link-solid { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 700; }
 
-.more { margin-top: 26px; font-size: 0.82rem; color: var(--ink-dim); }
-.more span { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.more a { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; text-decoration: none; }
-.more a:hover { text-decoration: underline; }
-
 /* Trayectoria */
 .traj-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 44px; align-items: start; }
 .timeline { border-left: 2px solid var(--line); padding-left: 30px; }
